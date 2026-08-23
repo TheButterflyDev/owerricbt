@@ -3,12 +3,15 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+
   "scripts": {
-    "dev": "vite",
-    "build": "tsc -b && vite build",
-    "lint": "oxlint",
-    "preview": "vite preview"
+    "dev:frontend": "cd frontend && npm run dev",
+    "dev:api": "cd api && npm run dev",
+    "dev": "concurrently \"npm run dev:api\" \"npm run dev:frontend\"",
+    "build": "cd frontend && tsc -b && vite build",
+    "lint": "oxlint"
   },
+  
   "dependencies": {
     "@fastify/vite": "^10.0.0",
     "@tailwindcss/vite": "^4.3.3",
