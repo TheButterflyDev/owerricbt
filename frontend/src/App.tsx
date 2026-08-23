@@ -12,13 +12,9 @@ function App() {
     <>
       <NavBar />
       <section id="center" className="flex flex-col gap-6.25 place-content-center place-items-center grow max-[1024px]:gap-4.5 max-[1024px]:px-5 max-[1024px]:pt-8 max-[1024px]:pb-6">
-        <div className="relative">
-          <img src={heroImg} className="relative z-0 w-42.5 inset-x-0 mx-auto" width="170" height="179" alt="" />
-          <img src={reactLogo} className="absolute z-1 top-8.5 h-7 inset-x-0 mx-auto transform:perspective-[(2000px)_rotateZ(300deg)_rotateX(44deg)_rotateY(39deg)_scale(1.4)]" alt="React logo" />
-          <img src={viteLogo} className="absolute z-0 top-26.75 h-6.5 w-auto inset-x-0 mx-auto transform:perspective-[(2000px)_rotateZ(300deg)_rotateX(40deg)_rotateY(39deg)_scale(0.8)]" alt="Vite logo" />
-        </div>
+        
         <div>
-          <h1>Get started</h1>
+          <h1>OWERRI CBT HI-TECH</h1>
           <p>
             Edit <code>src/App.tsx</code> and save to test <code>HMR</code>
           </p>
