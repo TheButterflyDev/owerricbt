@@ -11,9 +11,11 @@
   },
   "dependencies": {
     "@fastify/vite": "^10.0.0",
+    "@tailwindcss/vite": "^4.3.3",
     "fastify": "^5.12.1",
     "react": "^19.2.8",
-    "react-dom": "^19.2.8"
+    "react-dom": "^19.2.8",
+    "tailwindcss": "^4.3.3"
   },
   "devDependencies": {
     "@types/node": "^24.13.3",
