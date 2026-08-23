@@ -2,6 +2,7 @@ import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from './assets/vite.svg'
 import heroImg from './assets/hero.png'
+import NavBar from './components/layout/navbar'
 //import './App.css'
 
 function App() {
@@ -9,6 +10,7 @@ function App() {
 
   return (
     <>
+      <NavBar />
       <section id="center" className="flex flex-col gap-6.25 place-content-center place-items-center grow max-[1024px]:gap-4.5 max-[1024px]:px-5 max-[1024px]:pt-8 max-[1024px]:pb-6">
         <div className="relative">
           <img src={heroImg} className="relative z-0 w-42.5 inset-x-0 mx-auto" width="170" height="179" alt="" />
