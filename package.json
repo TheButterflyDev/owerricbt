@@ -25,5 +25,18 @@
     "oxlint": "^1.75.0",
     "typescript": "~6.0.2",
     "vite": "^8.2.0"
-  }
+  },
+  "description": "",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TheButterflyDev/owerricbt.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/TheButterflyDev/owerricbt/issues"
+  },
+  "homepage": "https://github.com/TheButterflyDev/owerricbt#readme"
 }
