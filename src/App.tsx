@@ -2,18 +2,18 @@ import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from './assets/vite.svg'
 import heroImg from './assets/hero.png'
-import './App.css'
+//import './App.css'
 
 function App() {
   const [count, setCount] = useState(0)
 
   return (
     <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
+      <section id="center" className="flex flex-col gap-[25px] place-content-center place-items-center grow max-[1024px]:gap-[18px] max-[1024px]:px-5 max-[1024px]:pt-8 max-[1024px]:pb-6">
+        <div className="relative">
+          <img src={heroImg} className="relative z-0 w-42.5 inset-x-0 mx-auto" width="170" height="179" alt="" />
+          <img src={reactLogo} className="absolute z-1 top-8.5 h-7 inset-x-0 mx-auto transform:perspective-[(2000px)_rotateZ(300deg)_rotateX(44deg)_rotateY(39deg)_scale(1.4)]" alt="React logo" />
+          <img src={viteLogo} className="absolute z-0 top-26.75 h-6.5 w-auto inset-x-0 mx-auto transform:perspective-[(2000px)_rotateZ(300deg)_rotateX(40deg)_rotateY(39deg)_scale(0.8)]" alt="Vite logo" />
         </div>
         <div>
           <h1>Get started</h1>
@@ -32,8 +32,8 @@ function App() {
 
       <div className="ticks"></div>
 
-      <section id="next-steps">
-        <div id="docs">
+      <section id="next-steps" className="flex text-left border-t border-(--border) max-[1024px]:flex-col max-[1024px]:text-center">
+        <div id="docs" className="flex-1 p-8 border-r border-(--border) max-[1024px]:p-[24px_20px] max-[1024px]:border-r-0 max-[1024px]:border-b">
           <svg className="icon" role="presentation" aria-hidden="true">
             <use href="/icons.svg#documentation-icon"></use>
           </svg>
