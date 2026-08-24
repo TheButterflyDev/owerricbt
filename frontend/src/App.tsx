@@ -14,6 +14,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
         <Route path="/jamb-news" element={<JambNewsPage />} />
+        
         <Route path="*" element={<h1>404 Not Found</h1>} />
       </Routes>
     </>
