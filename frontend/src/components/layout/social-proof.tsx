@@ -1,8 +1,7 @@
 const REASONS = [
   { mark: "38+", label: "Google Reviews", detail: "Consistently rated by satisfied students." },
   { mark: "5 min", label: "Fast Registration", detail: "Skip the queues — in and out quickly." },
-  { mark: "A/C", label: "Air-Conditioned Lab", detail: "Take your exams in cool comfort." },
-  { mark: "10+ yrs", label: "Experienced Tutors", detail: "Learn from seasoned professionals." },
+  { mark: "10+ yrs", label: "Quality customer services", detail: "Learn from seasoned professionals." },
 ];
 
 export default function WhyChooseUs() {
@@ -14,9 +13,9 @@ export default function WhyChooseUs() {
           Trusted by hundreds of students in Owerri.
         </h2>
 
-        <div className="mt-12 grid gap-px overflow-hidden rounded-large border border-paper/15 bg-paper/15 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mt-12 grid gap-px overflow-hidden sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
           {REASONS.map((reason) => (
-            <div key={reason.label} className="bg-navy p-6">
+            <div key={reason.label} className=" p-6">
               <p className="font-display text-heading-sm font-semibold text-lemon">{reason.mark}</p>
               <p className="mt-2 font-sans text-body font-semibold text-paper">{reason.label}</p>
               <p className="mt-1 font-sans text-caption tracking-caption text-paper/60">{reason.detail}</p>

@@ -6,9 +6,6 @@ export default function Home(){
         <>  
             <Hero />
             <WhyChooseUs />
-            <div>
-                <h1>Home Page</h1>
-            </div>
         </>
        
     )
