@@ -1,6 +1,7 @@
 import React from "react"
 import { Link } from "react-router-dom"
-import { CalendarIcon, HomeIcon, MailIcon, PencilIcon } from "lucide-react"
+import { CalendarIcon, HomeIcon, MailIcon, InfoIcon } from "lucide-react"
+import TopNav from "./topNav"
 
 import { cn } from "../../lib/utils"
 import { buttonVariants } from "../ui/button"
@@ -62,7 +63,7 @@ const Icons = {
 const DATA = {
   navbar: [
     { href: "/", icon: HomeIcon, label: "Home" },
-    { href: "/blog", icon: PencilIcon, label: "Blog" },
+    { href: "/about", icon: InfoIcon, label: "About" },
   ],
   contact: {
     social: {
@@ -90,12 +91,10 @@ const DATA = {
   },
 }
 
-export default function NavBar() {
+function MobileDock() {
   return (
     <div className="flex flex-col items-center justify-center">
-      {/* <span className="pointer-events-none bg-linear-to-b from-black to-gray-300/80 bg-clip-text text-center text-8xl leading-none font-semibold whitespace-pre-wrap text-transparent dark:from-white dark:to-slate-900/10">
-        Dock
-      </span> */}
+      
       <TooltipProvider>
         <Dock direction="middle">
           {DATA.navbar.map((item) => (
@@ -157,5 +156,18 @@ export default function NavBar() {
         </Dock>
       </TooltipProvider>
     </div>
+  )
+}
+
+export default function NavBar() {
+  return (
+    <>
+      <div className="hidden md:block">
+        <TopNav githubRepo="your-org/your-repo" brand="/Home" />
+      </div>
+      <div className="fixed z-50 top-2 left-0 right-0 md:hidden">
+        <MobileDock />
+      </div>
+    </>
   )
 }

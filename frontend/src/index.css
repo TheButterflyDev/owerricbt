@@ -119,6 +119,3 @@ body {
   font-family: var(--font-sans);
 }
 
-h1, h2 {
-  font: var(--font-display) var(--text-heading) / var(--text-heading--line-height) var(--tracking-heading);
-}
