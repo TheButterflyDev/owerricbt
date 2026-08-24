@@ -1,18 +1,18 @@
-const  WHATSAPP_LINK = "https://wa.me/2348030000000?text=Hello."
+const  WHATSAPP_LINK = "https://wa.link/ijor10"
 
 export default function Hero() {
   return (
     <section id="top" className="relative overflow-hidden">
-      <div className="mx-auto grid max-w-6xl gap-12 px-6 py-16 md:grid-cols-2 md:items-center md:py-24">
+      <div className="mx-auto grid max-w-6xl gap-12 py-16 md:grid-cols-2 md:items-center md:py-24">
         <div>
-          <p className="mb-4 font-mono text-caption uppercase tracking-caption text-navy/60">
+          {/* <p className="mb-4 font-mono text-caption uppercase tracking-caption text-navy/60">
             New Owerri · Admission &amp; Exam Center
-          </p>
+          </p> */}
           <h1 className="font-display text-heading tracking-heading text-navy md:text-display md:tracking-display">
-            Owerri CBT <span className="italic text-lemon-dim">HI-TECH</span>
+            Owerri CBT <div className="italic text-navy-ink text-main">HI-TECH</div>
           </h1>
-          <div className="mt-5 max-w-md font-sans text-subheading tracking-subheading text-ink/75">
-            <h2>Centre For Digital Learing</h2>
+          <div className="mt-5 max-w-md font-sans text-caption tracking-subheading text-ink/75">
+            <h2 className="text-heading-sm mb-2">Centre For Digital Learing</h2>
             JAMB registration, CBT exams &amp; computer training — booked in minutes, not queues.
           </div>
 

@@ -163,7 +163,7 @@ export default function NavBar() {
   return (
     <>
       <div className="hidden md:block">
-        <TopNav githubRepo="your-org/your-repo" brand="/Home" />
+        <TopNav githubRepo="your-org/your-repo" brand="Home" />
       </div>
       <div className="fixed z-50 top-2 left-0 right-0 md:hidden">
         <MobileDock />
