@@ -17,7 +17,7 @@ function Command({
   return (
     <CommandPrimitive
       ref={ref}
-      className={cn("flex h-full w-full flex-col bg-paper text-navy", className)}
+      className={cn("flex h-full w-full flex-col bg-paper text-navy rounded-2xl corner-squircle", className)}
       {...props}
     />
   )
