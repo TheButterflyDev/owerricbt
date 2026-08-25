@@ -2,6 +2,7 @@ import React from "react"
 import { Link } from "react-router-dom"
 import { CalendarIcon, HomeIcon, MailIcon, InfoIcon, Newspaper, SearchIcon } from "lucide-react"
 import TopNav from "./topNav"
+import { SearchProvider, useSearch, type SearchItem } from "../../features/search/searchProvider"
 
 import { cn } from "../../lib/utils"
 import { buttonVariants } from "../ui/button"
@@ -21,19 +22,6 @@ const Icons = {
   contact: (props: IconProps) => <MailIcon {...props} />,
   news: (props: IconProps) => <Newspaper {...props} />,
   search: (props: IconProps) => <SearchIcon {...props} />,
-  youtube: (props: IconProps) => (
-    <svg
-      width="32px"
-      height="32px"
-      viewBox="0 0 32 32"
-      fill="currentColor"
-      xmlns="http://www.w3.org/2000/svg"
-      {...props}
-    >
-      <title>youtube</title>
-      <path d="M29.41,9.26a3.5,3.5,0,0,0-2.47-2.47C24.76,6.2,16,6.2,16,6.2s-8.76,0-10.94.59A3.5,3.5,0,0,0,2.59,9.26,36.13,36.13,0,0,0,2,16a36.13,36.13,0,0,0,.59,6.74,3.5,3.5,0,0,0,2.47,2.47C7.24,25.8,16,25.8,16,25.8s8.76,0,10.94-.59a3.5,3.5,0,0,0,2.47-2.47A36.13,36.13,0,0,0,30,16,36.13,36.13,0,0,0,29.41,9.26ZM13.2,20.2V11.8L20.47,16Z" />
-    </svg>
-  ),
   whatsapp: (props: IconProps) => (
     <svg viewBox="0 0 24 24" {...props}>
       <path
@@ -65,11 +53,6 @@ const DATA = {
         url: "/jamb-news",
         icon: Icons.news,
       },
-      Search: {
-        name: "Search",
-        url: "/search",
-        icon: Icons.search,
-      },
       contact: {
         name: "Contact Us",
         url: "/contact",
@@ -80,6 +63,8 @@ const DATA = {
 }
 
 function MobileDock() {
+  const { open: openSearch } = useSearch()
+
   return (
     <div className="flex flex-col items-center justify-center">
       <TooltipProvider>
@@ -107,35 +92,46 @@ function MobileDock() {
               </Tooltip>
             </DockIcon>
           ))}
+
+          <DockIcon>
+            <Tooltip>
+              <TooltipTrigger
+                render={
+                  <button
+                    type="button"
+                    aria-label="Search"
+                    onClick={openSearch}
+                    className={cn(
+                      buttonVariants({ variant: "ghost", size: "icon" }),
+                      "size-12 rounded-full"
+                    )}
+                  >
+                    <Icons.search className="size-4" />
+                  </button>
+                }
+              />
+              <TooltipContent>
+                <p>Search</p>
+              </TooltipContent>
+            </Tooltip>
+          </DockIcon>
+
           <Separator orientation="vertical" className="h-full" />
           {Object.entries(DATA.contact.social).map(([name, social]) => (
             <DockIcon key={name}>
               <Tooltip>
                 <TooltipTrigger
                   render={
-                    social.url.startsWith("http") || social.url === "#" ? (
-                      <Link
-                        to={social.url}
-                        aria-label={social.name}
-                        className={cn(
-                          buttonVariants({ variant: "ghost", size: "icon" }),
-                          "size-12 rounded-full"
-                        )}
-                      >
-                        <social.icon className="size-4" />
-                      </Link>
-                    ) : (
-                      <Link
-                        to={social.url}
-                        aria-label={social.name}
-                        className={cn(
-                          buttonVariants({ variant: "ghost", size: "icon" }),
-                          "size-12 rounded-full"
-                        )}
-                      >
-                        <social.icon className="size-4" />
-                      </Link>
-                    )
+                    <Link
+                      to={social.url}
+                      aria-label={social.name}
+                      className={cn(
+                        buttonVariants({ variant: "ghost", size: "icon" }),
+                        "size-12 rounded-full"
+                      )}
+                    >
+                      <social.icon className="size-4" />
+                    </Link>
                   }
                 />
                 <TooltipContent>
@@ -150,15 +146,15 @@ function MobileDock() {
   )
 }
 
-export default function NavBar() {
+export default function NavBar({ searchItems = [] as SearchItem[] }) {
   return (
-    <>
+    <SearchProvider searchItems={searchItems}>
       <div className="hidden md:block">
         <TopNav brand="Home" />
       </div>
       <div className="fixed z-50 top-2 left-0 right-0 md:hidden">
         <MobileDock />
       </div>
-    </>
+    </SearchProvider>
   )
 }

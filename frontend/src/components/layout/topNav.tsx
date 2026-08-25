@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { Link, useNavigate } from "react-router-dom"
+import { Link } from "react-router-dom"
 import { SearchIcon, MoonIcon, SunIcon } from "lucide-react"
 import { Kbd, KbdGroup } from '../ui/kbd'
 import {
@@ -12,19 +12,11 @@ import {
 } from "../ui/tooltip"
 import { cn } from "../../lib/utils"
 import { buttonVariants } from "../ui/button"
-import {
-    CommandDialog,
-    CommandEmpty,
-    CommandGroup,
-    CommandInput,
-    CommandItem,
-    CommandList,
-} from "../ui/command"
+import { useSearch } from "../../features/search/searchProvider"
 
 interface TopNavProps {
     brand?: string
     links?: { href: string; label: string }[]
-    searchItems?: { href: string; label: string; group?: string }[]
 }
 
 const DEFAULT_LINKS = [
@@ -52,18 +44,13 @@ const WhatsappIcon = (props: IconProps) => (
 )
 
 function detectPlatform(): Platform {
-    // Modern approach (Chromium browsers)
     const uaData = (navigator as any).userAgentData
     if (uaData?.platform) {
         return uaData.platform.toLowerCase().includes('mac') ? 'mac' : 'win'
     }
-
-    // Fallback: userAgent string (works everywhere, including Safari/Firefox)
     const ua = navigator.userAgent.toLowerCase()
     if (ua.includes('mac')) return 'mac'
     if (ua.includes('win')) return 'win'
-
-    // Fallback: deprecated but still functional
     const platform = navigator.platform?.toLowerCase() ?? ''
     return platform.includes('mac') ? 'mac' : 'win'
 }
@@ -71,147 +58,101 @@ function detectPlatform(): Platform {
 export default function TopNav({
     brand = "Your Brand",
     links = DEFAULT_LINKS,
-    searchItems = [],
 }: TopNavProps) {
-    const [theme, setTheme] = React.useState<"light" | "dark">("light") // wire to your theme provider
-    const [open, setOpen] = React.useState(false)
+    const [theme, setTheme] = React.useState<"light" | "dark">("light")
     const [platform, setPlatform] = React.useState<Platform>('mac')
     const isMac = platform === 'mac'
-    const navigate = useNavigate()
-
-    // ⌘K / Ctrl+K opens the palette from anywhere on the page
-    React.useEffect(() => {
-        const down = (e: KeyboardEvent) => {
-            if (e.key.toLowerCase() === "k" && (e.metaKey || e.ctrlKey)) {
-                e.preventDefault()
-                setOpen((prev) => !prev)
-            }
-        }
-        document.addEventListener("keydown", down)
-        return () => document.removeEventListener("keydown", down)
-    }, [])
+    const { open: openSearch } = useSearch()
 
     React.useEffect(() => {
         setPlatform(detectPlatform())
     }, [])
 
-    const groupedItems = React.useMemo(() => {
-        const groups: Record<string, typeof searchItems> = {}
-        for (const item of searchItems) {
-            const key = item.group ?? "Pages"
-            groups[key] = groups[key] ? [...groups[key], item] : [item]
-        }
-        return groups
-    }, [searchItems])
-
-    const runCommand = (fn: () => void) => {
-        setOpen(false)
-        fn()
-    }
-
     return (
-        <>
-            <header className="sticky top-0 z-50 w-full border-b bg-background/80 backdrop-blur">
-                <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4">
-                    <Link to="/" className="flex items-center gap-2 font-semibold">
-                        <span className="flex size-7 items-center justify-center rounded-full bg-linear-to-br from-beige to-orange-400 text-sm text-white">
-                            /
-                        </span>
-                        {brand}
-                    </Link>
+        <header className="sticky top-0 z-50 w-full border-b bg-background/80 backdrop-blur">
+            <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4">
+                <Link to="/" className="flex items-center gap-2 font-semibold">
+                    <span className="flex size-7 items-center justify-center rounded-full bg-linear-to-br from-beige to-orange-400 text-sm text-white">
+                        /
+                    </span>
+                    {brand}
+                </Link>
 
-                    <nav className="hidden items-center gap-6 text-sm font-medium text-muted-foreground md:flex">
-                        {links.map((link) => (
-                            <Link key={link.href} to={link.href} className="transition-colors hover:text-foreground">
-                                {link.label}
-                            </Link>
-                        ))}
-                    </nav>
-
-                    <div className="flex items-center gap-3">
-                        <button
-                            onClick={() => setOpen(true)}
-                            className="relative hidden cursor-text w-56 items-center rounded-md border bg-muted/40 px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-muted md:flex"
-                        >
-                            <SearchIcon className="mr-2 size-4" />
-                            <span className="flex-1 text-left">Search ...</span>
-                            <KbdGroup className="pointer-events-none select-none rounded border bg-background px-1.5 text-[10px] font-medium">
-                                <Kbd>{isMac ? '⌘' : 'Ctrl'} K</Kbd>
-                            </KbdGroup>
-                        </button>
-
-                        <TooltipProvider>
-                            <Tooltip>
-                                <TooltipTrigger
-                                    render={
-                                        <button
-                                            aria-label="Search"
-                                            onClick={() => setOpen(true)}
-                                            className={cn(buttonVariants({ variant: "ghost", size: "icon" }), "md:hidden")}
-                                        >
-                                            <SearchIcon className="size-4" />
-                                        </button>
-                                    }
-                                />
-                                <TooltipContent>
-                                    <p>Search</p>
-                                </TooltipContent>
-                            </Tooltip>
-
-                            <Tooltip>
-                                <TooltipTrigger
-                                    render={
-                                        <button
-                                            aria-label="Toggle theme"
-                                            onClick={() => setTheme((t) => (t === "light" ? "dark" : "light"))}
-                                            className={cn(buttonVariants({ variant: "ghost", size: "icon" }))}
-                                        >
-                                            {theme === "light" ? <MoonIcon className="size-4" /> : <SunIcon className="size-4" />}
-                                        </button>
-                                    }
-                                />
-                                <TooltipContent>
-                                    <p>{theme === "light" ? "Switch to dark mode" : "Switch to light mode"}</p>
-                                </TooltipContent>
-                            </Tooltip>
-
-                            <Tooltip>
-                                <TooltipTrigger
-                                    render={
-                                        <a
-                                            href="https://wa.link/ijor10"
-                                            target="_blank"
-                                            rel="noreferrer"
-                                            className="gap-1.5"
-                                        >
-                                            <WhatsappIcon className="size-4" />
-                                        </a>
-                                    }
-                                />
-                                <TooltipContent>
-                                    <p>Chat on WhatsApp</p>
-                                </TooltipContent>
-                            </Tooltip>
-                        </TooltipProvider>
-                    </div>
-                </div>
-            </header>
-
-            <CommandDialog open={open} onOpenChange={setOpen}>
-                <CommandInput placeholder="Search ..." />
-                <CommandList>
-                    <CommandEmpty>No results found.</CommandEmpty>
-                    {Object.entries(groupedItems).map(([group, items]) => (
-                        <CommandGroup key={group} heading={group}>
-                            {items.map((item) => (
-                                <CommandItem key={item.href} value={item.label} onSelect={() => runCommand(() => navigate(item.href))}>
-                                    {item.label}
-                                </CommandItem>
-                            ))}
-                        </CommandGroup>
+                <nav className="hidden items-center gap-6 text-sm font-medium text-muted-foreground md:flex">
+                    {links.map((link) => (
+                        <Link key={link.href} to={link.href} className="transition-colors hover:text-foreground">
+                            {link.label}
+                        </Link>
                     ))}
-                </CommandList>
-            </CommandDialog>
-        </>
+                </nav>
+
+                <div className="flex items-center gap-3">
+                    <button
+                        onClick={openSearch}
+                        className="relative hidden cursor-text w-56 items-center rounded-md border bg-muted/40 px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-muted md:flex"
+                    >
+                        <SearchIcon className="mr-2 size-4" />
+                        <span className="flex-1 text-left">Search ...</span>
+                        <KbdGroup className="pointer-events-none select-none rounded border bg-background px-1.5 text-[10px] font-medium">
+                            <Kbd>{isMac ? '⌘' : 'Ctrl'} K</Kbd>
+                        </KbdGroup>
+                    </button>
+
+                    <TooltipProvider>
+                        <Tooltip>
+                            <TooltipTrigger
+                                render={
+                                    <button
+                                        aria-label="Search"
+                                        onClick={openSearch}
+                                        className={cn(buttonVariants({ variant: "ghost", size: "icon" }), "md:hidden")}
+                                    >
+                                        <SearchIcon className="size-4" />
+                                    </button>
+                                }
+                            />
+                            <TooltipContent>
+                                <p>Search</p>
+                            </TooltipContent>
+                        </Tooltip>
+
+                        <Tooltip>
+                            <TooltipTrigger
+                                render={
+                                    <button
+                                        aria-label="Toggle theme"
+                                        onClick={() => setTheme((t) => (t === "light" ? "dark" : "light"))}
+                                        className={cn(buttonVariants({ variant: "ghost", size: "icon" }))}
+                                    >
+                                        {theme === "light" ? <MoonIcon className="size-4" /> : <SunIcon className="size-4" />}
+                                    </button>
+                                }
+                            />
+                            <TooltipContent>
+                                <p>{theme === "light" ? "Switch to dark mode" : "Switch to light mode"}</p>
+                            </TooltipContent>
+                        </Tooltip>
+
+                        <Tooltip>
+                            <TooltipTrigger
+                                render={
+                                    <a
+                                        href="https://wa.link/ijor10"
+                                        target="_blank"
+                                        rel="noreferrer"
+                                        className="gap-1.5"
+                                    >
+                                        <WhatsappIcon className="size-4" />
+                                    </a>
+                                }
+                            />
+                            <TooltipContent>
+                                <p>Chat on WhatsApp</p>
+                            </TooltipContent>
+                        </Tooltip>
+                    </TooltipProvider>
+                </div>
+            </div>
+        </header>
     )
 }
