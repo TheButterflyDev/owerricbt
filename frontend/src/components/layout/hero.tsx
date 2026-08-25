@@ -18,18 +18,18 @@ export default function Hero() {
 
           <div className="mt-8 flex flex-wrap items-center gap-4">
             <a
+              href="#services"
+              className="rounded-button border-2 border-navy px-6 py-3 font-sans text-body font-semibold tracking-body text-navy transition hover:bg-navy hover:text-paper"
+            >
+              See services &amp; fees
+            </a>
+            <a
               href={WHATSAPP_LINK}
               target="_blank"
               rel="noreferrer"
               className="rounded-button bg-lemon px-6 py-3 font-sans text-body font-semibold tracking-body text-navy transition hover:bg-lemon-dim"
             >
               Chat on WhatsApp
-            </a>
-            <a
-              href="#services"
-              className="rounded-button border-2 border-navy px-6 py-3 font-sans text-body font-semibold tracking-body text-navy transition hover:bg-navy hover:text-paper"
-            >
-              See services &amp; fees
             </a>
           </div>
 
