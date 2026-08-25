@@ -3,6 +3,7 @@
 import * as React from "react"
 import { Link, useNavigate } from "react-router-dom"
 import { SearchIcon, MoonIcon, SunIcon } from "lucide-react"
+import { Kbd, KbdGroup } from '../ui/kbd'
 
 import { cn } from "../../lib/utils"
 import { buttonVariants } from "../ui/button"
@@ -30,6 +31,7 @@ const DEFAULT_LINKS = [
 ]
 
 type IconProps = React.HTMLAttributes<SVGElement>
+type Platform = 'mac' | 'win'
 
 const WhatsappIcon = (props: IconProps) => (
   <svg viewBox="0 0 24 24" {...props}>
@@ -51,6 +53,8 @@ export default function TopNav({
 }: TopNavProps) {
   const [theme, setTheme] = React.useState<"light" | "dark">("light") // wire to your theme provider
   const [open, setOpen] = React.useState(false)
+  const [platform, setPlatform] = React.useState<Platform>('mac')
+  const isMac = platform === 'mac'
   const navigate = useNavigate()
 
   // ⌘K / Ctrl+K opens the palette from anywhere on the page
@@ -105,9 +109,11 @@ export default function TopNav({
             >
               <SearchIcon className="mr-2 size-4" />
               <span className="flex-1 text-left">Search ...</span>
-              <kbd className="pointer-events-none select-none rounded border bg-background px-1.5 text-[10px] font-medium">
-                ⌘K
-              </kbd>
+              <KbdGroup className="pointer-events-none select-none rounded border bg-background px-1.5 text-[10px] font-medium">
+                <Kbd>{isMac ? 'C⌘' : 'Ctrl'}</Kbd>
+                <Kbd>K</Kbd>
+              </KbdGroup>
+              
             </button>
 
             <button
@@ -118,7 +124,7 @@ export default function TopNav({
               <SearchIcon className="size-4" />
             </button>
 
-            
+            <a
               href="https://wa.link/ijor10"
               target="_blank"
               rel="noreferrer"
