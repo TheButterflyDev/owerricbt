@@ -1,21 +1,25 @@
 {
   "name": "api",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Owerri CBT HI-TECH backend API",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "tsx watch server.ts"
+    "dev": "tsx watch server.ts",
+    "seed": "tsx seed.ts",
+    "start": "tsx server.ts"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "type": "commonjs",
+  "type": "module",
   "dependencies": {
     "@fastify/cors": "^11.3.0",
+    "better-sqlite3": "^13.0.3",
     "fastify": "^5.12.1"
   },
   "devDependencies": {
-    "tsx": "^4.23.12"
+    "@types/better-sqlite3": "^9.6.0",
+    "tsx": "^4.23.12",
+    "typescript": "~5.7.0"
+  },
+  "allowScripts": {
+    "better-sqlite3@11.10.0": true,
+    "esbuild@0.28.2": true
   }
 }
