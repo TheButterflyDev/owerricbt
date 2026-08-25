@@ -11,9 +11,9 @@ export default function Hero() {
           <h1 className="font-display text-heading tracking-heading text-navy md:text-display md:tracking-display">
             Owerri CBT <div className="italic text-navy-ink text-main">HI-TECH</div>
           </h1>
-          <div className="mt-5 max-w-md font-sans text-caption tracking-subheading text-ink/75">
+          <div className="mt-5 max-w-md font-sans text-body tracking-subheading text-ink/75">
             <h2 className="text-heading-sm mb-2">Centre For Digital Learing</h2>
-            JAMB registration, CBT exams &amp; computer training — booked in minutes, not queues.
+            JAMB registration, CBT exams &amp; computer training {/* — booked in minutes, not queues. */}
           </div>
 
           <div className="mt-8 flex flex-wrap items-center gap-4">
