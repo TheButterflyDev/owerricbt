@@ -11,8 +11,6 @@
     "lint": "oxlint"
   },
   "dependencies": {
-    "@fastify/cors": "^11.3.0",
-    "@fastify/vite": "^10.0.0",
     "@tailwindcss/vite": "^4.3.3",
     "fastify": "^5.12.1",
     "react": "^19.2.8",
