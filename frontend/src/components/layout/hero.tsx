@@ -3,7 +3,7 @@ const  WHATSAPP_LINK = "https://wa.link/ijor10"
 export default function Hero() {
   return (
     <section id="top" className="relative overflow-hidden">
-      <div className="mx-auto grid max-w-6xl gap-12 py-16 md:grid-cols-2 md:items-center md:py-24">
+      <div className="mx-auto grid place-content-center justify-center items-center max-w-6xl gap-12 px-6 py-28 md:grid-cols-2 md:items-center md:py-24">
         <div>
           {/* <p className="mb-4 font-mono text-caption uppercase tracking-caption text-navy/60">
             New Owerri · Admission &amp; Exam Center
