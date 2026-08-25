@@ -46,6 +46,23 @@ const WhatsappIcon = (props: IconProps) => (
   </svg>
 )
 
+function detectPlatform(): Platform {
+  // Modern approach (Chromium browsers)
+  const uaData = (navigator as any).userAgentData
+  if (uaData?.platform) {
+    return uaData.platform.toLowerCase().includes('mac') ? 'mac' : 'win'
+  }
+
+  // Fallback: userAgent string (works everywhere, including Safari/Firefox)
+  const ua = navigator.userAgent.toLowerCase()
+  if (ua.includes('mac')) return 'mac'
+  if (ua.includes('win')) return 'win'
+
+  // Fallback: deprecated but still functional
+  const platform = navigator.platform?.toLowerCase() ?? ''
+  return platform.includes('mac') ? 'mac' : 'win'
+}
+
 export default function TopNav({
   brand = "Your Brand",
   links = DEFAULT_LINKS,
@@ -68,6 +85,10 @@ export default function TopNav({
     document.addEventListener("keydown", down)
     return () => document.removeEventListener("keydown", down)
   }, [])
+
+  React.useEffect(() => {
+  setPlatform(detectPlatform())
+}, [])
 
   const groupedItems = React.useMemo(() => {
     const groups: Record<string, typeof searchItems> = {}
@@ -105,13 +126,13 @@ export default function TopNav({
           <div className="flex items-center gap-3">
             <button
               onClick={() => setOpen(true)}
-              className="relative hidden w-56 items-center rounded-md border bg-muted/40 px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-muted md:flex"
+              className="relative hidden cursor-text w-56 items-center rounded-md border bg-muted/40 px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-muted md:flex"
             >
               <SearchIcon className="mr-2 size-4" />
               <span className="flex-1 text-left">Search ...</span>
               <KbdGroup className="pointer-events-none select-none rounded border bg-background px-1.5 text-[10px] font-medium">
-                <Kbd>{isMac ? 'C⌘' : 'Ctrl'}</Kbd>
-                <Kbd>K</Kbd>
+                <Kbd>{isMac ? '⌘' : 'Ctrl'} K</Kbd>
+                {/* <Kbd>K</Kbd> */}
               </KbdGroup>
               
             </button>
@@ -124,15 +145,6 @@ export default function TopNav({
               <SearchIcon className="size-4" />
             </button>
 
-            <a
-              href="https://wa.link/ijor10"
-              target="_blank"
-              rel="noreferrer"
-              className={cn(buttonVariants({ variant: "outline", size: "sm" }), "gap-1.5")}
-            >
-              <WhatsappIcon className="size-4" />
-            </a>
-
             <button
               aria-label="Toggle theme"
               onClick={() => setTheme((t) => (t === "light" ? "dark" : "light"))}
@@ -140,6 +152,15 @@ export default function TopNav({
             >
               {theme === "light" ? <MoonIcon className="size-4" /> : <SunIcon className="size-4" />}
             </button>
+
+            <a
+              href="https://wa.link/ijor10"
+              target="_blank"
+              rel="noreferrer"
+              className="gap-1.5"
+            >
+              <WhatsappIcon className="size-4" />
+            </a>
           </div>
         </div>
       </header>
