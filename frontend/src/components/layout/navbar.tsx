@@ -94,24 +94,25 @@ const DATA = {
 function MobileDock() {
   return (
     <div className="flex flex-col items-center justify-center">
-      
       <TooltipProvider>
         <Dock direction="middle">
           {DATA.navbar.map((item) => (
             <DockIcon key={item.label}>
               <Tooltip>
-                <TooltipTrigger asChild>
-                  <Link
-                    to={item.href}
-                    aria-label={item.label}
-                    className={cn(
-                      buttonVariants({ variant: "ghost", size: "icon" }),
-                      "size-12 rounded-full"
-                    )}
-                  >
-                    <item.icon className="size-4" />
-                  </Link>
-                </TooltipTrigger>
+                <TooltipTrigger
+                  render={
+                    <Link
+                      to={item.href}
+                      aria-label={item.label}
+                      className={cn(
+                        buttonVariants({ variant: "ghost", size: "icon" }),
+                        "size-12 rounded-full"
+                      )}
+                    >
+                      <item.icon className="size-4" />
+                    </Link>
+                  }
+                />
                 <TooltipContent>
                   <p>{item.label}</p>
                 </TooltipContent>
@@ -122,31 +123,33 @@ function MobileDock() {
           {Object.entries(DATA.contact.social).map(([name, social]) => (
             <DockIcon key={name}>
               <Tooltip>
-                <TooltipTrigger asChild>
-                  {social.url.startsWith("http") || social.url === "#" ? (
-                    <a
-                      href={social.url}
-                      aria-label={social.name}
-                      className={cn(
-                        buttonVariants({ variant: "ghost", size: "icon" }),
-                        "size-12 rounded-full"
-                      )}
-                    >
-                      <social.icon className="size-4" />
-                    </a>
-                  ) : (
-                    <Link
-                      to={social.url}
-                      aria-label={social.name}
-                      className={cn(
-                        buttonVariants({ variant: "ghost", size: "icon" }),
-                        "size-12 rounded-full"
-                      )}
-                    >
-                      <social.icon className="size-4" />
-                    </Link>
-                  )}
-                </TooltipTrigger>
+                <TooltipTrigger
+                  render={
+                    social.url.startsWith("http") || social.url === "#" ? (
+                      <a
+                        href={social.url}
+                        aria-label={social.name}
+                        className={cn(
+                          buttonVariants({ variant: "ghost", size: "icon" }),
+                          "size-12 rounded-full"
+                        )}
+                      >
+                        <social.icon className="size-4" />
+                      </a>
+                    ) : (
+                      <Link
+                        to={social.url}
+                        aria-label={social.name}
+                        className={cn(
+                          buttonVariants({ variant: "ghost", size: "icon" }),
+                          "size-12 rounded-full"
+                        )}
+                      >
+                        <social.icon className="size-4" />
+                      </Link>
+                    )
+                  }
+                />
                 <TooltipContent>
                   <p>{name}</p>
                 </TooltipContent>
@@ -163,7 +166,7 @@ export default function NavBar() {
   return (
     <>
       <div className="hidden md:block">
-        <TopNav githubRepo="your-org/your-repo" brand="Home" />
+        <TopNav brand="Home" />
       </div>
       <div className="fixed z-50 top-2 left-0 right-0 md:hidden">
         <MobileDock />
