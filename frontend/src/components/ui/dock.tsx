@@ -17,7 +17,7 @@ type VariantProps<T> = T extends (...args: infer Args) => unknown
 const cva = (base: string) => ({ className }: { className?: string } = {}) =>
   [base, className].filter(Boolean).join(" ")
 
-export interface DockProps extends VariantProps<typeof dockVariants> {
+export type DockProps = VariantProps<typeof dockVariants> & {
   className?: string
   iconSize?: number
   iconMagnification?: number
