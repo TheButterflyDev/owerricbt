@@ -31,7 +31,7 @@ function CommandDialog({
     <Dialog {...props}>
       <DialogContent
         showCloseButton={true}
-        className="max-w-[calc(100%-2rem)] rounded-large border-2 border-navy bg-paper p-0 shadow-elevated sm:max-w-lg"
+        className="cursor-pointer max-w-[calc(100%-2rem)] rounded-large border-2 border-navy bg-paper p-0 shadow-elevated sm:max-w-lg "
       >
         <Command>{children}</Command>
       </DialogContent>
@@ -57,7 +57,7 @@ function CommandInput({
           <CommandPrimitive.Input
             ref={ref}
             className={cn(
-              "flex h-11 w-full bg-transparent font-mono text-body text-navy outline-none placeholder:text-navy/40 disabled:cursor-not-allowed disabled:opacity-50",
+              "flex h-11 w-full bg-transparent font-mono text-body text-navy outline-none placeholder:text-navy/40 disabled:cursor-not-allowed disabled:opacity-50 cursor-text",
               className
             )}
             {...props}
