@@ -1,3 +1,5 @@
+import { DiaTextReveal } from "../ui/dia-text-reveal"
+
 const  WHATSAPP_LINK = "https://wa.link/ijor10"
 
 export default function Hero() {
@@ -9,7 +11,15 @@ export default function Hero() {
             New Owerri · Admission &amp; Exam Center
           </p> */}
           <h1 className="font-display text-heading tracking-heading text-navy md:text-display md:tracking-display">
-            Owerri CBT <div className="italic text-navy-ink text-main">HI-TECH</div>
+            Owerri CBT 
+            <div className="italic text-navy-ink text-main">
+              <DiaTextReveal
+                className="text-navy-ink"
+                text="HI-TECH"
+                colors={["#f3e9d2", "#e8ff4d", "#081a2e"]}
+                textColor="#081a2e"
+              />
+            </div>
           </h1>
           <div className="mt-5 max-w-md font-sans text-body tracking-subheading text-ink/75">
             <h2 className="text-heading-sm mb-2">Centre For Digital Learing</h2>
