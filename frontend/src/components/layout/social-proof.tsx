@@ -1,3 +1,5 @@
+import { TextAnimate } from "../ui/text-animate"
+
 const REASONS = [
   { mark: "38+", label: "Google Reviews", detail: "Consistently rated by satisfied students." },
   { mark: "5 min", label: "Fast Registration", detail: "Skip the queues — in and out quickly." },
@@ -10,7 +12,9 @@ export default function WhyChooseUs() {
       <div className="mx-auto max-w-6xl px-6">
         <p className="font-mono text-caption uppercase tracking-caption text-lemon">Why choose us</p>
         <h2 className="mt-2 max-w-lg font-display text-heading tracking-heading text-paper">
-          Trusted by hundreds of students in Owerri.
+          <TextAnimate animation="slideUp" by="word">
+            Trusted by hundreds of students in Owerri.
+          </TextAnimate>
         </h2>
 
         <div className="mt-12 grid gap-px overflow-hidden sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
