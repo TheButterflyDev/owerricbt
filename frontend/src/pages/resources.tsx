@@ -1,76 +1,57 @@
-import React from "react";
+import { useEffect, useState } from "react"
 
-type Resource = {
-	title: string;
-	description: string;
-	type: string;
-	href: string;
-};
-
-const resources: Resource[] = [
-	{
-		title: "Getting Started Guide",
-		description: "A practical introduction to the tools and information available to you.",
-		type: "Guide",
-		href: "#getting-started",
-	},
-	{
-		title: "Helpful Articles",
-		description: "Explore clear, easy-to-follow articles on common questions and topics.",
-		type: "Articles",
-		href: "#articles",
-	},
-	{
-		title: "Frequently Asked Questions",
-		description: "Find quick answers to the questions people ask most often.",
-		type: "FAQ",
-		href: "#faq",
-	},
-];
-
-export default function Resources() {
-	return (
-		<main style={styles.page}>
-			<section style={styles.hero}>
-				<p style={styles.eyebrow}>LEARNING CENTER</p>
-				<h1 style={styles.heading}>Resources</h1>
-				<p style={styles.intro}>
-					Browse helpful guides, articles, and answers to support your next step.
-				</p>
-			</section>
-
-			<section aria-label="Resource library" style={styles.grid}>
-				{resources.map((resource) => (
-					<article key={resource.title} style={styles.card}>
-						<span style={styles.tag}>{resource.type}</span>
-						<h2 style={styles.cardTitle}>{resource.title}</h2>
-						<p style={styles.description}>{resource.description}</p>
-						<a href={resource.href} style={styles.link}>
-							View resource <span aria-hidden="true">→</span>
-						</a>
-					</article>
-				))}
-			</section>
-		</main>
-	);
+interface Resource {
+  id: number
+  title: string
+  description: string
+  resource_type: string
+  href: string | null
 }
 
-const styles: Record<string, React.CSSProperties> = {
-	page: {
-		minHeight: "100vh",
-		padding: "clamp(3rem, 8vw, 7rem) 1.5rem",
-		background: "#f8fafc",
-		color: "#172033",
-		fontFamily: "Inter, ui-sans-serif, system-ui, sans-serif",
-	},
-	hero: { maxWidth: "760px", margin: "0 auto 3rem", textAlign: "center" },
-	eyebrow: { margin: "0 0 0.75rem", color: "#5267d8", fontSize: "0.75rem", fontWeight: 700, letterSpacing: "0.14em" },
-	heading: { margin: 0, fontSize: "clamp(2.5rem, 7vw, 4.5rem)", lineHeight: 1.05, letterSpacing: "-0.04em" },
-	intro: { margin: "1.25rem auto 0", maxWidth: "560px", color: "#5d687c", fontSize: "1.125rem", lineHeight: 1.7 },
-	grid: { display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: "1.25rem", maxWidth: "1100px", margin: "0 auto" },
-	card: { display: "flex", flexDirection: "column", padding: "1.75rem", minHeight: "250px", background: "#fff", border: "1px solid #e6eaf0", borderRadius: "1rem", boxShadow: "0 10px 30px rgba(23, 32, 51, 0.05)" },
-	tag: { alignSelf: "flex-start", padding: "0.35rem 0.65rem", borderRadius: "999px", background: "#eef1ff", color: "#5267d8", fontSize: "0.75rem", fontWeight: 700 },
-	cardTitle: { margin: "1.25rem 0 0.75rem", fontSize: "1.35rem" },
-	description: { margin: 0, color: "#667085", lineHeight: 1.6 },
-	link: { marginTop: "auto", paddingTop: "1.5rem", color: "#5267d8", fontWeight: 700, textDecoration: "none" },
-};
+export default function Resources() {
+  const [resources, setResources] = useState<Resource[]>([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    fetch("/api/resources")
+      .then((r) => r.json())
+      .then((data: Resource[]) => setResources(data))
+      .catch(() => {})
+      .finally(() => setLoading(false))
+  }, [])
+
+  return (
+    <main className="min-h-screen px-6 py-16">
+      <section className="mx-auto max-w-4xl">
+        <p className="mb-3 text-sm font-bold uppercase tracking-widest text-blue-600">Learning Center</p>
+        <h1 className="text-4xl font-bold tracking-tight">Resources</h1>
+        <p className="mt-2 max-w-lg text-gray-500">
+          Browse helpful guides, articles, and answers to support your next step.
+        </p>
+
+        {loading && <p className="mt-8 text-gray-400">Loading resources...</p>}
+
+        {!loading && resources.length === 0 && (
+          <p className="mt-8 text-gray-400">No resources available yet.</p>
+        )}
+
+        <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          {resources.map((resource) => (
+            <article key={resource.id} className="flex flex-col rounded-xl border bg-white p-6 shadow-sm">
+              <span className="self-start rounded-full bg-blue-50 px-3 py-1 text-xs font-bold text-blue-700">
+                {resource.resource_type}
+              </span>
+              <h2 className="mt-3 text-lg font-semibold">{resource.title}</h2>
+              <p className="mt-1 flex-1 text-sm text-gray-500">{resource.description}</p>
+              {resource.href && (
+                <a href={resource.href} className="mt-4 text-sm font-bold text-blue-600 hover:underline">
+                  View resource &rarr;
+                </a>
+              )}
+            </article>
+          ))}
+        </div>
+      </section>
+    </main>
+  )
+}

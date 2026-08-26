@@ -1,32 +1,90 @@
-# React + TypeScript + Vite
+# Owerri CBT HI-TECH — Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+React 19 + Vite 8 + Tailwind CSS 4 frontend for the Owerri CBT HI-TECH platform.
 
-Currently, two official plugins are available:
+## Tech Stack
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+| Layer | Technology |
+|---|---|
+| Framework | React 19 |
+| Bundler | Vite 8 |
+| Language | TypeScript 6 |
+| Styling | Tailwind CSS 4 |
+| Routing | react-router-dom 7 |
+| Command Palette | cmdk |
+| Animation | motion (Framer Motion) |
 
-## React Compiler
+## Project Structure
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+```
+frontend/
+├── src/
+│   ├── main.tsx                    # App bootstrap
+│   ├── App.tsx                     # Route definitions
+│   ├── index.css                   # Tailwind entry + custom styles
+│   ├── pages/
+│   │   ├── home.tsx                # Landing page (Hero + WhyChooseUs)
+│   │   ├── about.tsx               # About page
+│   │   ├── events.tsx              # Events — fetches from /api/events
+│   │   ├── jamb-news.tsx           # News — fetches from /api/news
+│   │   ├── resources.tsx           # Resources — fetches from /api/resources
+│   │   └── contact-us.tsx          # Contact form — POSTs to /api/contact
+│   ├── components/
+│   │   ├── layout/
+│   │   │   ├── navbar.tsx          # Desktop TopNav + MobileDock
+│   │   │   ├── topNav.tsx          # Header with searchbar + command palette
+│   │   │   ├── hero.tsx            # Hero section with WhatsApp CTA
+│   │   │   └── social-proof.tsx    # WhyChooseUs — fetches from /api/site/stats
+│   │   └── ui/                     # Reusable UI primitives (button, dialog, command, etc.)
+│   └── lib/
+│       └── utils.ts                # cn() class merge utility
+├── vite.config.ts                  # Vite config with /api proxy to backend
+├── tsconfig.json
+├── package.json
+└── index.html
+```
 
-## Expanding the Oxlint configuration
+## Setup
 
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
+```bash
+npm install          # install dependencies
+npm run dev          # start Vite dev server (port 5173)
+npm run build        # production build
+```
 
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
+## API Integration
+
+The frontend consumes the Fastify backend via Vite's dev proxy. All `/api/*` requests are forwarded to `http://localhost:3000`.
+
+### Proxy Config (`vite.config.ts`)
+
+```ts
+server: {
+  proxy: {
+    '/api': {
+      target: 'http://localhost:3000',
+      changeOrigin: true,
+      secure: false,
+    },
   },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
 }
 ```
 
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+### Pages Wired to Backend
+
+| Page | API Endpoint | Method |
+|---|---|---|
+| Searchbar (Ctrl+K) | `/api/search?q=...` | GET |
+| Events | `/api/events` | GET |
+| JAMB News | `/api/news` | GET |
+| Resources | `/api/resources` | GET |
+| Contact Us | `/api/contact` | POST |
+| WhyChooseUs (stats) | `/api/site/stats` | GET |
+
+## Running Both (Frontend + API)
+
+From the project root:
+
+```bash
+npm run dev          # starts API (port 3000) + Frontend (port 5173) concurrently
+```

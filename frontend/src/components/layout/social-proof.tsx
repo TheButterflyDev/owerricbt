@@ -8,6 +8,7 @@ const REASONS = [
 ];
 
 export default function WhyChooseUs() {
+  
   return (
     <section className="border-y-2 border-navy bg-navy py-20">
       <div className="mx-auto max-w-6xl px-6">
