@@ -21,10 +21,15 @@ import {
     CommandList,
 } from "../ui/command"
 
+interface SearchResult {
+    events: { id: number; title: string; description: string; event_date: string; event_type: string }[]
+    news: { id: number; title: string; slug: string; summary: string; category: string }[]
+    resources: { id: number; title: string; description: string; resource_type: string }[]
+}
+
 interface TopNavProps {
     brand?: string
     links?: { href: string; label: string }[]
-    searchItems?: { href: string; label: string; group?: string }[]
 }
 
 const DEFAULT_LINKS = [
@@ -71,15 +76,17 @@ function detectPlatform(): Platform {
 export default function TopNav({
     brand = "Your Brand",
     links = DEFAULT_LINKS,
-    searchItems = [],
 }: TopNavProps) {
-    const [theme, setTheme] = React.useState<"light" | "dark">("light") // wire to your theme provider
+    const [theme, setTheme] = React.useState<"light" | "dark">("light")
     const [open, setOpen] = React.useState(false)
     const [platform, setPlatform] = React.useState<Platform>('mac')
+    const [query, setQuery] = React.useState("")
+    const [results, setResults] = React.useState<SearchResult>({ events: [], news: [], resources: [] })
+    const [searching, setSearching] = React.useState(false)
     const isMac = platform === 'mac'
     const navigate = useNavigate()
+    const debounceRef = React.useRef<ReturnType<typeof setTimeout> | null>(null)
 
-    // ⌘K / Ctrl+K opens the palette from anywhere on the page
     React.useEffect(() => {
         const down = (e: KeyboardEvent) => {
             if (e.key.toLowerCase() === "k" && (e.metaKey || e.ctrlKey)) {
@@ -95,17 +102,38 @@ export default function TopNav({
         setPlatform(detectPlatform())
     }, [])
 
-    const groupedItems = React.useMemo(() => {
-        const groups: Record<string, typeof searchItems> = {}
-        for (const item of searchItems) {
-            const key = item.group ?? "Pages"
-            groups[key] = groups[key] ? [...groups[key], item] : [item]
+    const fetchSearch = React.useCallback((q: string) => {
+        if (!q.trim()) {
+            setResults({ events: [], news: [], resources: [] })
+            setSearching(false)
+            return
         }
-        return groups
-    }, [searchItems])
+        setSearching(true)
+        fetch(`/api/search?q=${encodeURIComponent(q)}`)
+            .then((r) => r.json())
+            .then((data: SearchResult) => setResults(data))
+            .catch(() => setResults({ events: [], news: [], resources: [] }))
+            .finally(() => setSearching(false))
+    }, [])
+
+    const onSearchChange = React.useCallback((value: string) => {
+        setQuery(value)
+        if (debounceRef.current) clearTimeout(debounceRef.current)
+        debounceRef.current = setTimeout(() => fetchSearch(value), 300)
+    }, [fetchSearch])
+
+    React.useEffect(() => {
+        return () => {
+            if (debounceRef.current) clearTimeout(debounceRef.current)
+        }
+    }, [])
+
+    const hasResults = results.events.length > 0 || results.news.length > 0 || results.resources.length > 0
 
     const runCommand = (fn: () => void) => {
         setOpen(false)
+        setQuery("")
+        setResults({ events: [], news: [], resources: [] })
         fn()
     }
 
@@ -198,18 +226,45 @@ export default function TopNav({
             </header>
 
             <CommandDialog open={open} onOpenChange={setOpen}>
-                <CommandInput placeholder="Search ..." />
+                <CommandInput placeholder="Search events, news, resources..." value={query} onValueChange={onSearchChange} />
                 <CommandList>
-                    <CommandEmpty>No results found.</CommandEmpty>
-                    {Object.entries(groupedItems).map(([group, items]) => (
-                        <CommandGroup key={group} heading={group}>
-                            {items.map((item) => (
-                                <CommandItem key={item.href} value={item.label} onSelect={() => runCommand(() => navigate(item.href))}>
-                                    {item.label}
+                    <CommandEmpty>{searching ? "Searching..." : "No results found."}</CommandEmpty>
+                    {!query && (
+                        <CommandGroup heading="Pages">
+                            {links.map((link) => (
+                                <CommandItem key={link.href} value={link.label} onSelect={() => runCommand(() => navigate(link.href))}>
+                                    {link.label}
                                 </CommandItem>
                             ))}
                         </CommandGroup>
-                    ))}
+                    )}
+                    {results.events.length > 0 && (
+                        <CommandGroup heading="Events">
+                            {results.events.map((event) => (
+                                <CommandItem key={event.id} value={event.title} onSelect={() => runCommand(() => navigate("/events"))}>
+                                    {event.title}
+                                </CommandItem>
+                            ))}
+                        </CommandGroup>
+                    )}
+                    {results.news.length > 0 && (
+                        <CommandGroup heading="News">
+                            {results.news.map((article) => (
+                                <CommandItem key={article.id} value={article.title} onSelect={() => runCommand(() => navigate("/jamb-news"))}>
+                                    {article.title}
+                                </CommandItem>
+                            ))}
+                        </CommandGroup>
+                    )}
+                    {results.resources.length > 0 && (
+                        <CommandGroup heading="Resources">
+                            {results.resources.map((resource) => (
+                                <CommandItem key={resource.id} value={resource.title} onSelect={() => runCommand(() => navigate("/resources"))}>
+                                    {resource.title}
+                                </CommandItem>
+                            ))}
+                        </CommandGroup>
+                    )}
                 </CommandList>
             </CommandDialog>
         </>
