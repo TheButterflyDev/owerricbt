@@ -4,7 +4,7 @@ export default function Hero() {
   return (
     <section id="top" className="relative overflow-hidden">
       <div className="mx-auto grid place-content-center justify-center items-center max-w-6xl gap-12 px-6 py-28 md:grid-cols-2 md:items-center md:py-24">
-        <div>
+        <div className="md:block text-center md:text-left">
           {/* <p className="mb-4 font-mono text-caption uppercase tracking-caption text-navy/60">
             New Owerri · Admission &amp; Exam Center
           </p> */}
@@ -13,10 +13,16 @@ export default function Hero() {
           </h1>
           <div className="mt-5 max-w-md font-sans text-body tracking-subheading text-ink/75">
             <h2 className="text-heading-sm mb-2">Centre For Digital Learing</h2>
-            JAMB registration, CBT exams &amp; computer training {/* — booked in minutes, not queues. */}
+            JAMB registration, CBT exams &amp; computer training  <span className="font-bold md:hidden">— booked in minutes, not queues.</span>
           </div>
 
-          <div className="mt-8 flex flex-wrap items-center gap-4">
+          <div className="mt-8 flex flex-wrap md:justify-start justify-center items-center gap-4">
+            <a
+              href="#services"
+              className="rounded-button border-2 border-navy px-6 py-3 font-sans text-body font-semibold tracking-body text-navy transition hover:bg-navy hover:text-paper"
+            >
+              <span className="md:inline hidden">See</span> Services <span className="md:inline hidden">&amp; Fees</span> 
+            </a>
             <a
               href={WHATSAPP_LINK}
               target="_blank"
@@ -25,15 +31,9 @@ export default function Hero() {
             >
               Chat on WhatsApp
             </a>
-            <a
-              href="#services"
-              className="rounded-button border-2 border-navy px-6 py-3 font-sans text-body font-semibold tracking-body text-navy transition hover:bg-navy hover:text-paper"
-            >
-              See services &amp; fees
-            </a>
           </div>
 
-          <p className="mt-8 font-mono text-caption tracking-caption text-navy/50">
+          <p className="mt-8 font-mono text-caption tracking-caption hidden md:block text-navy/50">
             ★★★★★ 38+ verified Google reviews
           </p>
         </div>

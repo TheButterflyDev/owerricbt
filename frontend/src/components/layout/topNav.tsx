@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { Link, useNavigate } from "react-router-dom"
+import { Link } from "react-router-dom"
 import { SearchIcon, MoonIcon, SunIcon } from "lucide-react"
 import { Kbd, KbdGroup } from '../ui/kbd'
 import {
@@ -12,14 +12,7 @@ import {
 } from "../ui/tooltip"
 import { cn } from "../../lib/utils"
 import { buttonVariants } from "../ui/button"
-import {
-    CommandDialog,
-    CommandEmpty,
-    CommandGroup,
-    CommandInput,
-    CommandItem,
-    CommandList,
-} from "../ui/command"
+import { useSearch } from "../../features/search/searchProvider"
 
 interface SearchResult {
     events: { id: number; title: string; description: string; event_date: string; event_type: string }[]
@@ -57,18 +50,13 @@ const WhatsappIcon = (props: IconProps) => (
 )
 
 function detectPlatform(): Platform {
-    // Modern approach (Chromium browsers)
     const uaData = (navigator as any).userAgentData
     if (uaData?.platform) {
         return uaData.platform.toLowerCase().includes('mac') ? 'mac' : 'win'
     }
-
-    // Fallback: userAgent string (works everywhere, including Safari/Firefox)
     const ua = navigator.userAgent.toLowerCase()
     if (ua.includes('mac')) return 'mac'
     if (ua.includes('win')) return 'win'
-
-    // Fallback: deprecated but still functional
     const platform = navigator.platform?.toLowerCase() ?? ''
     return platform.includes('mac') ? 'mac' : 'win'
 }
@@ -78,76 +66,27 @@ export default function TopNav({
     links = DEFAULT_LINKS,
 }: TopNavProps) {
     const [theme, setTheme] = React.useState<"light" | "dark">("light")
-    const [open, setOpen] = React.useState(false)
     const [platform, setPlatform] = React.useState<Platform>('mac')
     const [query, setQuery] = React.useState("")
     const [results, setResults] = React.useState<SearchResult>({ events: [], news: [], resources: [] })
     const [searching, setSearching] = React.useState(false)
     const isMac = platform === 'mac'
-    const navigate = useNavigate()
-    const debounceRef = React.useRef<ReturnType<typeof setTimeout> | null>(null)
-
-    React.useEffect(() => {
-        const down = (e: KeyboardEvent) => {
-            if (e.key.toLowerCase() === "k" && (e.metaKey || e.ctrlKey)) {
-                e.preventDefault()
-                setOpen((prev) => !prev)
-            }
-        }
-        document.addEventListener("keydown", down)
-        return () => document.removeEventListener("keydown", down)
-    }, [])
+    const { open: openSearch } = useSearch()
 
     React.useEffect(() => {
         setPlatform(detectPlatform())
     }, [])
-
-    const fetchSearch = React.useCallback((q: string) => {
-        if (!q.trim()) {
-            setResults({ events: [], news: [], resources: [] })
-            setSearching(false)
-            return
-        }
-        setSearching(true)
-        fetch(`/api/search?q=${encodeURIComponent(q)}`)
-            .then((r) => r.json())
-            .then((data: SearchResult) => setResults(data))
-            .catch(() => setResults({ events: [], news: [], resources: [] }))
-            .finally(() => setSearching(false))
-    }, [])
-
-    const onSearchChange = React.useCallback((value: string) => {
-        setQuery(value)
-        if (debounceRef.current) clearTimeout(debounceRef.current)
-        debounceRef.current = setTimeout(() => fetchSearch(value), 300)
-    }, [fetchSearch])
-
-    React.useEffect(() => {
-        return () => {
-            if (debounceRef.current) clearTimeout(debounceRef.current)
-        }
-    }, [])
-
-    const hasResults = results.events.length > 0 || results.news.length > 0 || results.resources.length > 0
-
-    const runCommand = (fn: () => void) => {
-        setOpen(false)
-        setQuery("")
-        setResults({ events: [], news: [], resources: [] })
-        fn()
-    }
-
     return (
-        <>
-            <header className="sticky top-0 z-50 w-full border-b bg-background/80 backdrop-blur">
-                <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4">
-                    <Link to="/" className="flex items-center gap-2 font-semibold">
-                        <span className="flex size-7 items-center justify-center rounded-full bg-linear-to-br from-beige to-orange-400 text-sm text-white">
-                            /
-                        </span>
-                        {brand}
-                    </Link>
+        <header className="sticky top-0 z-50 w-full border-b bg-background/80 backdrop-blur">
+            <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4">
+                <Link to="/" className="flex items-center gap-2 font-semibold">
+                    <span className="flex size-7 items-center justify-center rounded-full bg-linear-to-br from-beige to-orange-400 text-sm text-white">
+                        /
+                    </span>
+                    {brand}
+                </Link>
 
+<<<<<<< HEAD
                     <nav className="hidden items-center gap-6 text-sm font-medium text-muted-foreground md:flex">
                         {links.map((link) => (
                             <Link key={link.href} to={link.href} className="transition-colors hover:text-foreground">
@@ -225,48 +164,81 @@ export default function TopNav({
                 </div>
             </header>
 
-            <CommandDialog open={open} onOpenChange={setOpen}>
-                <CommandInput placeholder="Search events, news, resources..." value={query} onValueChange={onSearchChange} />
-                <CommandList>
-                    <CommandEmpty>{searching ? "Searching..." : "No results found."}</CommandEmpty>
-                    {!query && (
-                        <CommandGroup heading="Pages">
-                            {links.map((link) => (
-                                <CommandItem key={link.href} value={link.label} onSelect={() => runCommand(() => navigate(link.href))}>
-                                    {link.label}
-                                </CommandItem>
-                            ))}
-                        </CommandGroup>
-                    )}
-                    {results.events.length > 0 && (
-                        <CommandGroup heading="Events">
-                            {results.events.map((event) => (
-                                <CommandItem key={event.id} value={event.title} onSelect={() => runCommand(() => navigate("/events"))}>
-                                    {event.title}
-                                </CommandItem>
-                            ))}
-                        </CommandGroup>
-                    )}
-                    {results.news.length > 0 && (
-                        <CommandGroup heading="News">
-                            {results.news.map((article) => (
-                                <CommandItem key={article.id} value={article.title} onSelect={() => runCommand(() => navigate("/jamb-news"))}>
-                                    {article.title}
-                                </CommandItem>
-                            ))}
-                        </CommandGroup>
-                    )}
-                    {results.resources.length > 0 && (
-                        <CommandGroup heading="Resources">
-                            {results.resources.map((resource) => (
-                                <CommandItem key={resource.id} value={resource.title} onSelect={() => runCommand(() => navigate("/resources"))}>
-                                    {resource.title}
-                                </CommandItem>
-                            ))}
-                        </CommandGroup>
-                    )}
-                </CommandList>
-            </CommandDialog>
-        </>
+                <nav className="hidden items-center gap-6 text-sm font-medium text-muted-foreground md:flex">
+                    {links.map((link) => (
+                        <Link key={link.href} to={link.href} className="transition-colors hover:text-foreground">
+                            {link.label}
+                        </Link>
+                    ))}
+                </nav>
+
+                <div className="flex items-center gap-3">
+                    <button
+                        onClick={openSearch}
+                        className="relative hidden cursor-text w-56 items-center rounded-md border bg-muted/40 px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-muted md:flex"
+                    >
+                        <SearchIcon className="mr-2 size-4" />
+                        <span className="flex-1 text-left">Search ...</span>
+                        <KbdGroup className="pointer-events-none select-none rounded border bg-background px-1.5 text-[10px] font-medium">
+                            <Kbd>{isMac ? '⌘' : 'Ctrl'} K</Kbd>
+                        </KbdGroup>
+                    </button>
+
+                    <TooltipProvider>
+                        <Tooltip>
+                            <TooltipTrigger
+                                render={
+                                    <button
+                                        aria-label="Search"
+                                        onClick={openSearch}
+                                        className={cn(buttonVariants({ variant: "ghost", size: "icon" }), "md:hidden")}
+                                    >
+                                        <SearchIcon className="size-4" />
+                                    </button>
+                                }
+                            />
+                            <TooltipContent>
+                                <p>Search</p>
+                            </TooltipContent>
+                        </Tooltip>
+
+                        <Tooltip>
+                            <TooltipTrigger
+                                render={
+                                    <button
+                                        aria-label="Toggle theme"
+                                        onClick={() => setTheme((t) => (t === "light" ? "dark" : "light"))}
+                                        className={cn(buttonVariants({ variant: "ghost", size: "icon" }))}
+                                    >
+                                        {theme === "light" ? <MoonIcon className="size-4" /> : <SunIcon className="size-4" />}
+                                    </button>
+                                }
+                            />
+                            <TooltipContent>
+                                <p>{theme === "light" ? "Switch to dark mode" : "Switch to light mode"}</p>
+                            </TooltipContent>
+                        </Tooltip>
+
+                        <Tooltip>
+                            <TooltipTrigger
+                                render={
+                                    <a
+                                        href="https://wa.link/ijor10"
+                                        target="_blank"
+                                        rel="noreferrer"
+                                        className="gap-1.5"
+                                    >
+                                        <WhatsappIcon className="size-4" />
+                                    </a>
+                                }
+                            />
+                            <TooltipContent>
+                                <p>Chat on WhatsApp</p>
+                            </TooltipContent>
+                        </Tooltip>
+                    </TooltipProvider>
+                </div>
+            </div>
+        </header>
     )
 }
