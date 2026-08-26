@@ -1,4 +1,5 @@
 import { DiaTextReveal } from "../ui/dia-text-reveal"
+import { PixelImage } from "../ui/pixel-image"
 
 const  WHATSAPP_LINK = "https://wa.link/ijor10"
 
@@ -50,40 +51,9 @@ export default function Hero() {
 
         {/* Signature visual: an oversized admission-ticket card */}
         <div className="relative mx-auto w-full max-w-sm">
-          <div className="rotate-2 rounded-large border-2 border-navy bg-paper p-7 shadow-elevated">
-            <div className="flex items-start justify-between">
-              <div>
-                <p className="font-mono text-caption uppercase tracking-caption text-navy/60">Admission Ticket</p>
-                <p className="mt-1 font-display text-heading-sm font-semibold text-navy">Exam Slot</p>
-              </div>
-              <span className="rounded-tag bg-lemon px-2 py-1 font-mono text-caption font-semibold text-navy">
-                VALID
-              </span>
-            </div>
-
-            <div className="relative my-6 h-0 border-t-2 border-dashed border-navy/25">
-              <span className="ticket-punch -left-9 -top-2" />
-              <span className="ticket-punch -right-9 -top-2" />
-            </div>
-
-            <dl className="grid grid-cols-2 gap-4 font-mono text-caption tracking-caption text-navy/70">
-              <div>
-                <dt className="uppercase text-navy/50">Center</dt>
-                <dd className="mt-1 text-body font-medium text-navy">New Owerri</dd>
-              </div>
-              <div>
-                <dt className="uppercase text-navy/50">Lab</dt>
-                <dd className="mt-1 text-body font-medium text-navy">A/C, 24 seats</dd>
-              </div>
-              <div>
-                <dt className="uppercase text-navy/50">Reg. No.</dt>
-                <dd className="mt-1 text-body font-medium text-navy">OCH-2026</dd>
-              </div>
-              <div>
-                <dt className="uppercase text-navy/50">Status</dt>
-                <dd className="mt-1 text-body font-medium text-lemon-dim">Open</dd>
-              </div>
-            </dl>
+          
+          <div className="rotate-2 rounded-large">
+            <PixelImage src="/hero.jpeg" grid="8x8" />
           </div>
 
           {/* A second, partially-hidden ticket peeking out for depth */}
