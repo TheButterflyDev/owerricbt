@@ -1,5 +1,6 @@
 import Text3DFlip from "../components/ui/text-3d-flip"
 import { InteractiveHoverButton } from "../components/ui/interactive-hover-button"
+import { PixelImage } from "../components/ui/pixel-image"
 
 export default function About(){
     return (
@@ -16,8 +17,8 @@ export default function About(){
                     <h1 className="mt-2 font-display text-heading tracking-heading text-navy md:text-display md:tracking-display">
                         <div className="italic text-navy-ink text-main">
                             <Text3DFlip
-                                className="bg-background font-serif text-2xl sm:text-5xl md:text-[56px]"
-                                textClassName="bg-background text-foreground"
+                                className="bg-background text-center font-display text-heading tracking-heading"
+                                textClassName="bg-background text-foreground text-center"
                                 flipTextClassName="bg-background text-foreground"
                                 rotateDirection="top"
                                 staggerDuration={0.03}
@@ -43,7 +44,7 @@ export default function About(){
                             <InteractiveHoverButton className="hover:bg-navy hover:text-paper">Learn More</InteractiveHoverButton>
                         </a>
                         <span
-                        className="rounded-button bg-lemon px-6 py-3 font-sans text-body font-semibold tracking-body text-navy transition hover:bg-lemon-dim"
+                        className="rounded-button hidden md:inline bg-lemon px-6 py-3 font-sans text-body font-semibold tracking-body text-navy transition hover:bg-lemon-dim"
                         >
                         Chat on WhatsApp
                         </span>
@@ -52,41 +53,9 @@ export default function About(){
 
                     {/* Signature visual: an oversized admission-ticket card */}
                     <div className="relative mx-auto w-full max-w-sm">
-                    <div className="rotate-2 rounded-large border-2 border-navy bg-paper p-7 shadow-elevated">
-                        <div className="flex items-start justify-between">
-                        <div>
-                            <p className="font-mono text-caption uppercase tracking-caption text-navy/60">Admission Ticket</p>
-                            <p className="mt-1 font-display text-heading-sm font-semibold text-navy">Exam Slot</p>
+                        <div className="rotate-2 rounded-large">
+                            <PixelImage src="/oht-image.webp" grid="8x8" />
                         </div>
-                        <span className="rounded-tag bg-lemon px-2 py-1 font-mono text-caption font-semibold text-navy">
-                            VALID
-                        </span>
-                        </div>
-
-                        <div className="relative my-6 h-0 border-t-2 border-dashed border-navy/25">
-                        <span className="ticket-punch -left-9 -top-2" />
-                        <span className="ticket-punch -right-9 -top-2" />
-                        </div>
-
-                        <dl className="grid grid-cols-2 gap-4 font-mono text-caption tracking-caption text-navy/70">
-                        <div>
-                            <dt className="uppercase text-navy/50">Center</dt>
-                            <dd className="mt-1 text-body font-medium text-navy">New Owerri</dd>
-                        </div>
-                        <div>
-                            <dt className="uppercase text-navy/50">Lab</dt>
-                            <dd className="mt-1 text-body font-medium text-navy">A/C, 24 seats</dd>
-                        </div>
-                        <div>
-                            <dt className="uppercase text-navy/50">Reg. No.</dt>
-                            <dd className="mt-1 text-body font-medium text-navy">OCH-2026</dd>
-                        </div>
-                        <div>
-                            <dt className="uppercase text-navy/50">Status</dt>
-                            <dd className="mt-1 text-body font-medium text-lemon-dim">Open</dd>
-                        </div>
-                        </dl>
-                    </div>
 
                     {/* A second, partially-hidden ticket peeking out for depth */}
                     <div className="absolute -bottom-6 -left-6 -z-10 h-full w-full -rotate-6 rounded-large border-2 border-navy/15 bg-beige-border/40" />
