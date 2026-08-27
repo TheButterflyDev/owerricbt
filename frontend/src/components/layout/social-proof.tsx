@@ -15,7 +15,7 @@ export default function WhyChooseUs() {
         <p className="font-mono text-caption uppercase tracking-caption text-lemon">Why choose us</p>
         <h2 className="mt-2 max-w-lg font-display text-heading tracking-heading text-paper">
           <TextAnimate animation="slideUp" by="word">
-            Trusted by hundreds of students in Owerri.
+            Trusted by hundreds of students.
           </TextAnimate>
         </h2>
 

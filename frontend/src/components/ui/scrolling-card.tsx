@@ -19,39 +19,64 @@ export interface FeatureTabsProps {
   className?: string;
 }
 
-export function FeatureTabs({ items, duration = 5000, className }: FeatureTabsProps) {
+export function FeatureTabs({ items, duration = 2000, className }: FeatureTabsProps) {
   const [active, setActive] = useState(0);
-  const [progress, setProgress] = useState(0);
   const [paused, setPaused] = useState(false);
 
   const rafRef = useRef<number | undefined>(undefined);
-  const startRef = useRef<number | null>(null);
+  const barRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const pausedRef = useRef(false);
+
   const prefersReducedMotion = useRef(
     typeof window !== "undefined" &&
       window.matchMedia?.("(prefers-reduced-motion: reduce)").matches
   ).current;
 
+  // keep a ref in sync with `paused` so the rAF loop can read it
+  // without needing to restart every time it's toggled
   useEffect(() => {
-    if (prefersReducedMotion) return; // no auto-advance, no animated bar
+    pausedRef.current = paused;
+  }, [paused]);
 
-    startRef.current = null;
+  // reset every bar's width whenever the active tab changes
+  // (runs once per switch — cheap, and it's the only re-render this triggers)
+  useEffect(() => {
+    items.forEach((_, i) => {
+      const bar = barRefs.current[i];
+      if (!bar) return;
+      if (i < active) bar.style.width = "100%";
+      else if (i > active) bar.style.width = "0%";
+      else bar.style.width = "0%"; // active bar starts fresh, raf loop takes over
+    });
+  }, [active, items.length]);
+
+  useEffect(() => {
+    if (prefersReducedMotion) return;
+
+    let start: number | null = null;
+    let elapsedAtPause = 0;
 
     function tick(ts: number) {
-      if (paused) {
-        // freeze the clock while paused, resume from where we left off
-        startRef.current = null;
+      if (pausedRef.current) {
+        // freeze: remember how far we'd gotten, don't advance further
+        if (start !== null) {
+          elapsedAtPause = ts - start;
+          start = null;
+        }
         rafRef.current = requestAnimationFrame(tick);
         return;
       }
-      if (startRef.current === null) startRef.current = ts - (progress / 100) * duration;
+      if (start === null) start = ts - elapsedAtPause;
 
-      const elapsed = ts - startRef.current;
+      const elapsed = ts - start;
       const pct = Math.min(100, (elapsed / duration) * 100);
-      setProgress(pct);
+
+      const bar = barRefs.current[active];
+      if (bar) bar.style.width = `${pct}%`; // <- direct DOM write, no setState
 
       if (pct >= 100) {
         setActive((a) => (a + 1) % items.length);
-        return; // effect re-runs on `active` change and resets the clock
+        return; // effect re-runs on `active` change, fresh start
       }
       rafRef.current = requestAnimationFrame(tick);
     }
@@ -60,25 +85,22 @@ export function FeatureTabs({ items, duration = 5000, className }: FeatureTabsPr
     return () => {
       if (rafRef.current !== undefined) cancelAnimationFrame(rafRef.current);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [active, duration, items.length, paused]);
+  }, [active, duration, items.length, prefersReducedMotion]);
 
   function handleSelect(i: number) {
     if (i === active) return;
-    setProgress(0);
     setActive(i);
   }
 
   return (
     <div
-      className={cn("grid items-stretch gap-8 md:grid-cols-2", className)}
+      className={cn("grid items-stretch gap-0 md:grid-cols-2", className)}
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
     >
       <div role="tablist" aria-orientation="vertical" className="flex flex-col">
         {items.map((item, i) => {
           const isActive = i === active;
-          const barWidth = i < active ? 100 : isActive ? progress : 0;
 
           return (
             <button
@@ -87,15 +109,16 @@ export function FeatureTabs({ items, duration = 5000, className }: FeatureTabsPr
               aria-selected={isActive}
               onClick={() => handleSelect(i)}
               className={cn(
-                "relative border-b border-border py-4 text-left transition-colors",
+                "relative py-4 text-left transition-colors",
+                i !== items.length - 1 && "border-b border-border",
                 isActive ? "text-foreground" : "text-muted-foreground hover:text-foreground/80"
               )}
-            >
+               >
               <div className="flex items-baseline gap-3">
                 <span className="font-mono text-xs text-muted-foreground">
                   {String(i + 1).padStart(2, "0")}
                 </span>
-                <span className="text-base font-medium">{item.label}</span>
+                <span className="text-subheading font-medium">{item.label}</span>
               </div>
 
               <AnimatePresence initial={false}>
@@ -105,7 +128,7 @@ export function FeatureTabs({ items, duration = 5000, className }: FeatureTabsPr
                     animate={{ opacity: 1, height: "auto" }}
                     exit={{ opacity: 0, height: 0 }}
                     transition={{ duration: 0.2 }}
-                    className="ml-9 mt-1 overflow-hidden text-sm text-muted-foreground"
+                    className="ml-7 mt-1 overflow-hidden text-base text-muted-foreground"
                   >
                     {item.description}
                   </motion.p>
@@ -114,11 +137,11 @@ export function FeatureTabs({ items, duration = 5000, className }: FeatureTabsPr
 
               <div className="absolute bottom-0 left-0 h-0.5 w-full bg-border">
                 <div
-                  className="h-full bg-primary"
-                  style={{
-                    width: `${barWidth}%`,
-                    transition: isActive ? "none" : "width 0.2s ease-out",
+                  ref={(el) => {
+                    barRefs.current[i] = el;
                   }}
+                  className="h-full bg-primary"
+                  style={{ width: "0%" }}
                 />
               </div>
             </button>
@@ -126,7 +149,7 @@ export function FeatureTabs({ items, duration = 5000, className }: FeatureTabsPr
         })}
       </div>
 
-      <div className="relative min-h-70 overflow-hidden rounded-xl bg-muted/40">
+      <div className="relative bg-lemon-dim min-h-70 overflow-hidden rounded-r-4xl bg-muted/40">
         <AnimatePresence mode="wait">
           <motion.div
             key={items[active].id}
