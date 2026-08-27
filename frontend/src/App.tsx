@@ -6,6 +6,7 @@ import JambNewsPage from "./pages/jamb-news"
 import Resources from "./pages/resources"
 import ContactUs from "./pages/contact-us"
 import EventsPage from "./pages/events"
+import { Footer } from "./components/layout/footer";
 
 function App() {
   
@@ -24,6 +25,7 @@ function App() {
           <Route path="*" element={<h1>404 Not Found</h1>} />
         </Routes>
       </main>
+      <Footer />
     </>
   )
 }
