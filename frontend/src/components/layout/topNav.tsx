@@ -14,11 +14,11 @@ import { cn } from "../../lib/utils"
 import { buttonVariants } from "../ui/button"
 import { useSearch } from "../../features/search/searchProvider"
 
-interface SearchResult {
-    events: { id: number; title: string; description: string; event_date: string; event_type: string }[]
-    news: { id: number; title: string; slug: string; summary: string; category: string }[]
-    resources: { id: number; title: string; description: string; resource_type: string }[]
-}
+// interface SearchResult {
+//     events: { id: number; title: string; description: string; event_date: string; event_type: string }[]
+//     news: { id: number; title: string; slug: string; summary: string; category: string }[]
+//     resources: { id: number; title: string; description: string; resource_type: string }[]
+// }
 
 interface TopNavProps {
     brand?: string
@@ -67,9 +67,9 @@ export default function TopNav({
 }: TopNavProps) {
     const [theme, setTheme] = React.useState<"light" | "dark">("light")
     const [platform, setPlatform] = React.useState<Platform>('mac')
-    const [query, setQuery] = React.useState("")
-    const [results, setResults] = React.useState<SearchResult>({ events: [], news: [], resources: [] })
-    const [searching, setSearching] = React.useState(false)
+    // const [query, setQuery] = React.useState("")
+    // const [results, setResults] = React.useState<SearchResult>({ events: [], news: [], resources: [] })
+    // const [searching, setSearching] = React.useState(false)
     const isMac = platform === 'mac'
     const { open: openSearch } = useSearch()
 
