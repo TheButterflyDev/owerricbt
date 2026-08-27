@@ -20,7 +20,7 @@ const SERVICES: Service[] = [
 
 export default function Services() {
   return (
-    <section id="services" className="mx-auto max-w-6xl px-6 py-20">
+    <section id="services" className="mx-auto h-200 max-w-6xl px-6 py-20">
       <div className="max-w-xl">
         <p className="font-mono text-caption uppercase tracking-caption text-navy/60">What we offer</p>
         <h2 className="mt-2 font-display text-heading tracking-heading text-navy">
