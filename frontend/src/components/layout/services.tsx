@@ -1,5 +1,6 @@
 import { TextAnimate } from "../ui/text-animate";
 import { FeatureTabs } from "../ui/scrolling-card";
+import { PixelImage } from "../ui/pixel-image";
 
 interface Service {
   id: string;
@@ -38,7 +39,7 @@ export default function Services() {
             id: service.id,
             label: service.label,
             description: service.description,
-            content: <img src={service.preview} alt={service.label} className="w-full h-full object-cover" />,
+            content: <PixelImage src={service.preview}  />,
           }))}
         />
       </div>
