@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react"
+import { useEffect,useRef, useState } from "react"
 import { TypingAnimation } from "../ui/typing-animation";
-import { MailIcon, Phone } from "lucide-react"
+import { MailIcon, Phone, ChevronDown } from "lucide-react"
 
 const MAIL_TO = "mailto:info@owerricbt.com"
 const WHATSAPP_LINK = "https://wa.link/ijor10";
@@ -20,6 +20,67 @@ const WhatsappIcon = (props: IconProps) => (
         />
     </svg>
 )
+
+// Each number gets its own wa.me link (converts local 080... to +234 international format).
+// Swap the `link` values for real wa.link short-links per number if you have them.
+const WHATSAPP_NUMBERS = [
+    { label: "0803-710-3677", link: "https://wa.link/ijor10" },
+    { label: "0803-363-0333", link: "https://wa.link/dcf9ts" },
+    { label: "0803-985-0342", link: "https://wa.link/9h8f4g" },
+];
+
+
+function WhatsappDropdown() {
+    const [open, setOpen] = useState(false);
+    const rootRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        function handleClickOutside(e: MouseEvent) {
+            if (rootRef.current && !rootRef.current.contains(e.target as Node)) {
+                setOpen(false);
+            }
+        }
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => document.removeEventListener("mousedown", handleClickOutside);
+    }, []);
+
+    return (
+        <div ref={rootRef} className="relative inline-block">
+            <button
+                type="button"
+                onClick={() => setOpen((v) => !v)}
+                aria-haspopup="true"
+                aria-expanded={open}
+                className="inline-flex items-center gap-2 rounded-button bg-lemon px-5 py-2.5 font-sans text-caption font-semibold tracking-caption text-navy transition hover:bg-lemon-dim"
+            >
+                Chat on WhatsApp
+                <ChevronDown
+                    className={`size-4 transition-transform ${open ? "rotate-180" : ""}`}
+                />
+            </button>
+
+            {open && (
+                <div className="absolute bottom-full left-0 z-10 mb-2 w-56 overflow-hidden rounded-md border border-navy/10 bg-paper shadow-lg">
+                    {WHATSAPP_NUMBERS.map((n) => (
+                        <a
+                            key={n.link}
+                            href={n.link}
+                            target="_blank"
+                            rel="noreferrer"
+                            onClick={() => setOpen(false)}
+                            className="flex items-center gap-2 px-4 py-2.5 font-sans text-body text-navy transition hover:bg-lemon/20"
+                        >
+                            <WhatsappIcon className="size-4 text-navy/70" />
+                            {n.label}
+                        </a>
+                    ))}
+                </div>
+            )}
+        </div>
+    );
+}
+
+
 
 export function Footer() {
 
@@ -61,14 +122,15 @@ export function Footer() {
                 </div>
 
                 <div>
-                    <a
+                    {/* <a
                     href={WHATSAPP_LINK}
                     target="_blank"
                     rel="noreferrer"
                     className="inline-block rounded-button bg-lemon px-5 py-2.5 font-sans text-caption font-semibold tracking-caption text-navy transition hover:bg-lemon-dim"
                     >
                     Chat on WhatsApp
-                    </a>
+                    </a> */}
+                    <WhatsappDropdown />
                 </div>
                 </div>
 
