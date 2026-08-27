@@ -149,7 +149,7 @@ export function FeatureTabs({ items, duration = 2000, className }: FeatureTabsPr
         })}
       </div>
 
-      <div className="relative bg-lemon-dim min-h-70 overflow-hidden rounded-b-4xl md:rounded-b-none md:rounded-r-4xl bg-muted/40">
+      <div className="relative bg-lemon-dim min-h-70 overflow-hidden rounded-b-4xl md:rounded-bl-none md:rounded-r-4xl bg-muted/40">
         <AnimatePresence mode="wait">
           <motion.div
             key={items[active].id}
