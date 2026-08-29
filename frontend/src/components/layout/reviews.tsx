@@ -180,7 +180,7 @@ export default function Reviews() {
                         See what people who have used our services have to say about their experience at Owerri CBT HI-TECH.
                     </p>
                 </div>
-                {/* <div> */}
+                <div>
                     <div className="hidden md:block">
                         <Marquee3D />
                     </div>
@@ -188,7 +188,7 @@ export default function Reviews() {
                         <MarqueeMobile />
                     </div>
                     
-                {/* </div> */}
+                </div> 
             </section>
         </>
     )
