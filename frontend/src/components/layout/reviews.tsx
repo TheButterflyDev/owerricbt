@@ -55,6 +55,53 @@ const PLACE = {
   mapsUrl: "https://www.google.com/maps/place/?q=place_id:ChIJJS8wtg5ZQhARuWuBKooa91A",
 }
 
+export function Text() {
+
+  return (
+    <section className="px-6 py-8 mx-auto z-0 h-[60vh] relative overflow-hidden">
+      {/* Animated arrows container */}
+      
+      <h2 className="absolute bottom-0 mb-4 text-xl md:font-bold tracking-tight leading-none md:text-5xl xl:text-6xl flex justify-center items-center">
+        
+        <blockquote
+          className="relative z-20 flex gap-2 pt-2 text-2xl text-ink md:text-3xl lg:pt-0 lg:text-4xl px-2 py-1 rounded-lg">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 20 20"
+            role="img"
+            fill="currentColor"
+            className="-mt-1 h-7 text-lemon-dim md:-mt-3 md:h-16 lg:h-12 dark:text-slate-800"
+          >
+            <path d="M7.27273 16.3833H0L5.30713 4H10.0737L7.27273 16.3833ZM17.199 16.3833H9.92629L15.2334 4H20L17.199 16.3833Z"></path>
+          </svg>
+          <span className="flex flex-col">
+            <span className="leading-[1.15]">
+              <em>Welcome To</em>{" "}
+            </span>
+            <span className="flex items-center gap-2 leading-[1.15] lg:gap-4">
+              <span className="mt-1  w-6 rounded-full bg-slate-400 h-1 lg:w-24"></span>
+              <span>
+                <strong className="font-extrabold text-lemon-dim">A</strong> Better{" "}
+                <strong className="font-extrabold text-lemon-dim">Way </strong>
+              </span> 
+              <span className=" mt-1 h-0.5 w-3 rounded-full bg-slate-400 lg:h-1 lg:w-14 "></span>
+            </span>
+            <strong className="relative  text-navy-ink">
+              {/* <span className="absolute -left-0.5 bottom-0 right-0 top-1 z-[-1] rounded-md bg-slate-100 px-1 lg:-left-1.5 lg:-right-0.5 lg:bottom-0 lg:top-2 dark:bg-slate-800"></span>
+              */}<span className="text-primary-500">Learn</span>, {" "} 
+              <span className="text-primary-500">Register</span>{" "}&amp;{" "}
+              <span className="text-primary-500">
+                 
+                 Prepare</span>.
+            </strong>
+          </span>
+        </blockquote>
+        
+      </h2>
+    </section>
+  )
+}
+
 const ReviewCard = ({
   img,
   name,
@@ -210,15 +257,16 @@ export function LocationSection() {
 
 export default function Reviews() {
     return (
-        <>
-            <section id="reviews" className=" relative grid items-stretch gap-0 md:grid-cols-2 mx-auto max-w-6xl p-0">
+        <section id="reviews">
+            <section className=" relative grid items-stretch gap-0 md:grid-cols-2 mx-auto max-w-6xl p-0">
                 
                 <div className="max-w-xl">
-                    <h2 className="mt-2 font-sans tracking-caption text-navy">
+                    <h2 className="mt-2 hidden md:block font-sans tracking-caption text-navy">
                     <TextReveal>
                         Welcome to a Better Way to Learn, Register, and Prepare
                     </TextReveal>
                     </h2>
+                    <Text />
                 </div>
 
                 <div className="relative hidden md:block">
@@ -238,7 +286,7 @@ export default function Reviews() {
                 
             
             </section>
-            <section className="px-6 pb-20 grid items-stretch gap-8 md:grid-cols-2 mx-auto max-w-6xl">
+            <section className="px-6 py-20 grid items-stretch gap-8 md:grid-cols-2 mx-auto max-w-6xl">
                 <div className="max-w-lg">
                     <p className="font-mono text-caption uppercase tracking-caption text-navy/60">What people say</p>
                     <h2 className="mt-2 font-display text-heading tracking-heading text-navy">
@@ -290,6 +338,6 @@ export default function Reviews() {
                     <LocationSection />
                 </div>
             </section>
-        </>
+        </section>
     )
 }
