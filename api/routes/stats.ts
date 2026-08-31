@@ -10,7 +10,7 @@ interface SiteStat {
 
 const statsRoutes: FastifyPluginAsync = async (app) => {
   app.get('/site/stats', async () => {
-    const stats = db.prepare('SELECT * FROM site_stats').all() as SiteStat[]
+    const stats = await db.all<SiteStat>('SELECT * FROM site_stats')
     const result: Record<string, { value: string; label: string }> = {}
     for (const stat of stats) {
       result[stat.stat_key] = { value: stat.stat_value, label: stat.label }

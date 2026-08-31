@@ -23,7 +23,6 @@ export default function Resources() {
   return (
     <main className="min-h-screen px-6 py-16">
       <section className="mx-auto max-w-4xl">
-        <p className="mb-3 text-sm font-bold uppercase tracking-widest text-blue-600">Learning Center</p>
         <h1 className="text-4xl font-bold tracking-tight">Resources</h1>
         <p className="mt-2 max-w-lg text-gray-500">
           Browse helpful guides, articles, and answers to support your next step.
@@ -38,7 +37,7 @@ export default function Resources() {
         <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {resources.map((resource) => (
             <article key={resource.id} className="flex flex-col rounded-xl border bg-white p-6 shadow-sm">
-              <span className="self-start rounded-full bg-blue-50 px-3 py-1 text-xs font-bold text-blue-700">
+              <span className="self-start inline-flex items-center rounded-md border border-slate-200 bg-slate-50 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-slate-600">
                 {resource.resource_type}
               </span>
               <h2 className="mt-3 text-lg font-semibold">{resource.title}</h2>

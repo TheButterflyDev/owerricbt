@@ -40,7 +40,7 @@ const EventsPage = () => {
             <article key={event.id} className="rounded-xl border bg-white p-6 shadow-sm">
               <div className="flex items-start justify-between gap-4">
                 <div className="flex-1">
-                  <span className="inline-block rounded-full bg-blue-50 px-3 py-1 text-xs font-medium text-blue-700">
+                  <span className="inline-flex items-center rounded-md border border-slate-200 bg-slate-50 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-slate-600">
                     {event.event_type}
                   </span>
                   <h2 className="mt-2 text-xl font-semibold">{event.title}</h2>

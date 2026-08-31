@@ -13,17 +13,17 @@ interface Resource {
 
 const resourcesRoutes: FastifyPluginAsync = async (app) => {
   app.get('/resources', async () => {
-    const resources = db.prepare(`
+    const resources = await db.all<Omit<Resource, 'content' | 'created_at'>>(`
       SELECT id, title, description, resource_type, href
       FROM resources
       ORDER BY created_at DESC
-    `).all() as Omit<Resource, 'content' | 'created_at'>[]
+    `)
     return resources
   })
 
   app.get<{ Params: { id: string } }>('/resources/:id', async (request, reply) => {
     const { id } = request.params
-    const resource = db.prepare('SELECT * FROM resources WHERE id = ?').get(id) as Resource | undefined
+    const resource = await db.get<Resource>('SELECT * FROM resources WHERE id = $1', [Number(id)])
     if (!resource) {
       return reply.code(404).send({ error: 'Resource not found' })
     }
