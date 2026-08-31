@@ -64,7 +64,7 @@ export default function About(){
                     </div>
                 </div>
             </section>
-            <section id="about-us" className="border-y-2 border-navy bg-navy py-20 flex">
+            <section id="about-us" className="border-y-2 border-navy bg-navy py-20 flex flex-col md:flex-row md:items-center md:justify-between gap-12">
                 <div className="mx-auto max-w-6xl px-6">
                     <p className="font-mono text-caption uppercase tracking-caption text-lemon">About us</p>
                     <h3 className="mt-2 max-w-lg font-display text-heading tracking-heading text-paper">
