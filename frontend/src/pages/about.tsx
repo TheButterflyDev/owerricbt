@@ -19,8 +19,8 @@ export default function About(){
                     <h1 className="mt-2 font-display text-heading tracking-heading text-navy md:text-display md:tracking-display">
                         <div className="italic text-navy-ink text-main">
                             <Text3DFlip
-                                className="bg-background text-center font-display text-heading tracking-heading"
-                                textClassName="bg-background text-foreground text-center"
+                                className="block bg-background text-center md:text-left font-display text-heading tracking-heading"
+                                textClassName="bg-background text-foreground text-center md:text-left"
                                 flipTextClassName="bg-background text-foreground"
                                 rotateDirection="top"
                                 staggerDuration={0.03}
