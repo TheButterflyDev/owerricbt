@@ -22,7 +22,7 @@ const searchRoutes: FastifyPluginAsync = async (app) => {
 
     const term = `%${query}%`
 
-    const events = db.prepare(`
+    const events = await db.all(`
       SELECT
         id,
         title,
@@ -31,12 +31,12 @@ const searchRoutes: FastifyPluginAsync = async (app) => {
         event_type,
         '/events' AS href
       FROM events
-      WHERE LOWER(title) LIKE LOWER(?) OR LOWER(description) LIKE LOWER(?)
+      WHERE LOWER(title) LIKE LOWER($1) OR LOWER(description) LIKE LOWER($2)
       ORDER BY event_date ASC
       LIMIT 8
-    `).all(term, term)
+    `, [term, term])
 
-    const news = db.prepare(`
+    const news = await db.all(`
       SELECT
         id,
         title,
@@ -45,12 +45,12 @@ const searchRoutes: FastifyPluginAsync = async (app) => {
         category,
         '/jamb-news' AS href
       FROM news
-      WHERE LOWER(title) LIKE LOWER(?) OR LOWER(summary) LIKE LOWER(?) OR LOWER(content) LIKE LOWER(?)
+      WHERE LOWER(title) LIKE LOWER($1) OR LOWER(summary) LIKE LOWER($2) OR LOWER(content) LIKE LOWER($3)
       ORDER BY published_at DESC
       LIMIT 8
-    `).all(term, term, term)
+    `, [term, term, term])
 
-    const resources = db.prepare(`
+    const resources = await db.all(`
       SELECT
         id,
         title,
@@ -58,10 +58,10 @@ const searchRoutes: FastifyPluginAsync = async (app) => {
         resource_type,
         '/resources' AS href
       FROM resources
-      WHERE LOWER(title) LIKE LOWER(?) OR LOWER(description) LIKE LOWER(?)
+      WHERE LOWER(title) LIKE LOWER($1) OR LOWER(description) LIKE LOWER($2)
       ORDER BY created_at DESC
       LIMIT 8
-    `).all(term, term)
+    `, [term, term])
 
     return { events, news, resources }
   })
