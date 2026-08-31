@@ -58,7 +58,7 @@ const PLACE = {
 export function Text() {
 
   return (
-    <section className="px-6 py-8 mx-auto z-0 h-[60vh] relative overflow-hidden">
+    <section className="px-6 py-8 block md:hidden mx-auto z-0 h-[60vh] relative overflow-hidden">
       {/* Animated arrows container */}
       
       <h2 className="absolute bottom-0 mb-4 text-xl md:font-bold tracking-tight leading-none md:text-5xl xl:text-6xl flex justify-center items-center">
