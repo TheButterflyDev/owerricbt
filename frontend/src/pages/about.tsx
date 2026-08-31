@@ -1,6 +1,8 @@
 import Text3DFlip from "../components/ui/text-3d-flip"
 import { InteractiveHoverButton } from "../components/ui/interactive-hover-button"
 import { PixelImage } from "../components/ui/pixel-image"
+import { TextAnimate } from "../components/ui/text-animate"
+import { motion } from "framer-motion"
 
 export default function About(){
     return (
@@ -60,6 +62,40 @@ export default function About(){
                     {/* A second, partially-hidden ticket peeking out for depth */}
                     <div className="absolute -bottom-6 -left-6 -z-10 h-full w-full -rotate-6 rounded-large border-2 border-navy/15 bg-beige-border/40" />
                     </div>
+                </div>
+            </section>
+            <section id="about-us" className="border-y-2 border-navy bg-navy py-20 flex">
+                <div className="mx-auto max-w-6xl px-6">
+                    <p className="font-mono text-caption uppercase tracking-caption text-lemon">About us</p>
+                    <h3 className="mt-2 max-w-lg font-display text-heading tracking-heading text-paper">
+                        <TextAnimate animation="slideUp" by="word">
+                            A Centre for Digital Learning.
+                        </TextAnimate>
+                    </h3>
+                    <div className="mt-5 max-w-md font-sans text-body tracking-subheading text-paper/75">
+                        <p>
+                            Owerri CBT HI-TECH is a leading digital learning and computer-based testing centre located in Owerri, Imo State. Dedicated to technology-assisted education, we provide modern facilities, expert guidance, and practical knowledge to support students, examination candidates, and professionals in navigating today’s digital landscape.
+                        </p>
+                        
+                       
+                    </div>
+                    
+                </div>
+                <div className="mx-auto max-w-md px-6 font-sans text-body tracking-subheading text-paper/75">
+                    <motion.p className="mt-4" initial={{ opacity: 0, x: -60 }}
+                        whileInView={{ opacity: 1, x: 0 }}
+                        viewport={{ once: true, amount: 0.4 }}
+                        transition={{ duration: 0.6, ease: "easeOut" }}
+                    >
+                        Our comprehensive services include computer-based examination hosting, academic registration support—such as JAMB and Post-UTME processing—and hands-on computer training. By combining state-of-the-art technology with personalized support, we equip learners with the essential skills and resources needed for academic, career, and personal success.
+                    </motion.p>
+                    <motion.p className="mt-4" initial={{ opacity: 0, x: 60 }}
+                        whileInView={{ opacity: 1, x: 0 }}
+                        viewport={{ once: true, amount: 0.4 }}
+                        transition={{ duration: 0.6, ease: "easeOut" }}
+                    >
+                        Our core mission is to leverage technology to make learning, examinations, and essential online academic services simpler, more accessible, and highly effective. We are committed to removing digital barriers and delivering a seamless, stress-free experience for everyone in our community.
+                    </motion.p>
                 </div>
             </section>
         </>
