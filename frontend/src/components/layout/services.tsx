@@ -1,6 +1,7 @@
 import { TextAnimate } from "../ui/text-animate";
 import { FeatureTabs } from "../ui/scrolling-card";
 import { PixelImage } from "../ui/pixel-image";
+import { motion } from "motion/react";
 
 interface Service {
   id: string;
@@ -17,6 +18,139 @@ const SERVICES: Service[] = [
   { id: "digital-learning", label: "Digital Learning & Hands-on Training", description: "Experience practical digital learning through interactive, hands-on computer training built to develop real-world tech skills.", preview: "https://i.pinimg.com/736x/c3/d1/7b/c3d17b0cd35c8757591d639c15410db5.jpg" },
   { id: "academic", label: "Academic & Online Services", description: "Build your skills through practical, hands-on training in Microsoft Office, internet navigation, and core computer basics. Beyond training, our centre offers fast, reliable assistance for a wide range of legitimate online academic and digital services.", preview: "https://i.pinimg.com/736x/ff/6c/60/ff6c607d782e2a45be81f022e3913ec0.jpg" },
 ];
+
+
+const WHATSAPP_LINK = "https://wa.link/ijor10";
+
+interface DoItem {
+  label: string;
+}
+
+interface CommitmentItem {
+  title: string;
+  description: string;
+}
+
+const WHAT_WE_DO: DoItem[] = [
+  { label: "Computer-Based Testing" },
+  { label: "JAMB registration and support" },
+  { label: "Post-UTME and admission-related services" },
+  { label: "CBT examination preparation" },
+  { label: "Computer training" },
+  { label: "Digital learning" },
+  { label: "Online academic services" },
+  { label: "Practical technology training" },
+];
+
+const OUR_COMMITMENT: CommitmentItem[] = [
+  {
+    title: "Quality",
+    description: "Providing dependable digital and learning services.",
+  },
+  {
+    title: "Convenience",
+    description: "Making academic and digital processes easier for our customers.",
+  },
+  {
+    title: "Integrity",
+    description: "Providing honest and responsible assistance.",
+  },
+  {
+    title: "Learning",
+    description: "Helping people develop useful digital skills.",
+  },
+  {
+    title: "Innovation",
+    description: "Continuously improving the way we use technology to support education.",
+  },
+];
+
+export function WhatWeDo() {
+  return (
+    <section id="what-we-do" className="mx-auto max-w-6xl px-6 py-20">
+      <div className="grid gap-12 md:grid-cols-[minmax(0,1fr)_minmax(0,1.3fr)] md:gap-16">
+        {/* Left: sticky intro, mirrors the site's eyebrow/heading/body rhythm */}
+        <div className="md:sticky md:top-24 md:self-start">
+          <p className="font-mono text-caption uppercase tracking-caption text-navy/60">
+            What we do
+          </p>
+          <h2 className="mt-2 font-display text-heading tracking-heading text-navy">
+            <TextAnimate animation="slideUp" by="word">
+              Digital Education & Academic Support
+            </TextAnimate>
+          </h2>
+          <p className="mt-4 max-w-md font-sans text-body tracking-body text-ink/70">
+            Our services cover several areas of digital education and academic
+            support, including:
+          </p>
+
+          <a
+            href={WHATSAPP_LINK}
+            target="_blank"
+            rel="noreferrer"
+            className="mt-8 hidden rounded-button bg-lemon px-6 py-3 font-sans text-body font-semibold tracking-body text-navy transition hover:bg-lemon-dim md:inline-block"
+          >
+            Chat on WhatsApp
+          </a>
+        </div>
+
+        {/* Right: stacked ticket-style cards, one per service */}
+        <div className="flex flex-col gap-3">
+          {WHAT_WE_DO.map((item) => (
+            <div
+              className="flex items-center gap-4 rounded-card border-1 border-navy/10 px-5 py-4"
+            >
+              
+              <span className="font-sans text-body font-medium tracking-body text-navy">
+                {item.label}
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+export function OurCommitment() {
+  return (
+    <section className="border-y-2 border-navy bg-navy py-20">
+      <div className="mx-auto max-w-6xl px-6">
+        <p className="font-mono text-caption uppercase tracking-caption text-lemon">
+          Our commitment
+        </p>
+        <h2 className="mt-2 max-w-lg font-display text-heading tracking-heading text-paper">
+          <TextAnimate animation="slideUp" by="word">
+            What You Can Count On
+          </TextAnimate>
+        </h2>
+
+        <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+          {OUR_COMMITMENT.map((item, i) => (
+            <motion.div
+              key={item.title}
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.4 }}
+              transition={{ duration: 0.4, delay: i * 0.06, ease: "easeOut" }}
+              className="rounded-card border border-paper/15 bg-navy-ink/40 p-6"
+            >
+              <span className="flex size-9 items-center justify-center rounded-full bg-lemon/15 text-lemon">
+                
+              </span>
+              <p className="mt-4 font-sans text-body font-semibold text-paper">
+                {item.title}
+              </p>
+              <p className="mt-1 font-sans text-caption tracking-caption text-paper/60">
+                {item.description}
+              </p>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
 
 export default function Services() {
   return (

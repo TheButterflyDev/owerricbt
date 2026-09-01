@@ -3,6 +3,7 @@ import { InteractiveHoverButton } from "../components/ui/interactive-hover-butto
 import { PixelImage } from "../components/ui/pixel-image"
 import { TextAnimate } from "../components/ui/text-animate"
 import { motion } from "framer-motion"
+import { WhatWeDo, OurCommitment} from "../components/layout/services"
 
 export default function About(){
     return (
@@ -46,7 +47,7 @@ export default function About(){
                             <InteractiveHoverButton className="hover:bg-navy hover:text-paper">Learn More</InteractiveHoverButton>
                         </a>
                         <span
-                        className="rounded-button hidden md:inline bg-lemon px-6 py-3 font-sans text-body font-semibold tracking-body text-navy transition hover:bg-lemon-dim"
+                        className="rounded-full hidden md:inline bg-lemon px-6 py-2.5 font-sans text-body font-semibold tracking-body text-navy transition hover:bg-lemon-dim"
                         >
                         Chat on WhatsApp
                         </span>
@@ -97,6 +98,10 @@ export default function About(){
                         Our core mission is to leverage technology to make learning, examinations, and essential online academic services simpler, more accessible, and highly effective. We are committed to removing digital barriers and delivering a seamless, stress-free experience for everyone in our community.
                     </motion.p>
                 </div>
+            </section>
+            <section>
+                <WhatWeDo />
+                <OurCommitment />
             </section>
         </>
        

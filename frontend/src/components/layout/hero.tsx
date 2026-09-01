@@ -38,7 +38,7 @@ export default function Hero() {
               href={WHATSAPP_LINK}
               target="_blank"
               rel="noreferrer"
-              className="rounded-button bg-lemon px-6 py-3 font-sans text-body font-semibold tracking-body text-navy transition hover:bg-lemon-dim"
+              className="rounded-full bg-lemon px-6 py-3 font-sans text-body font-semibold tracking-body text-navy transition hover:bg-lemon-dim"
             >
               Chat on WhatsApp
             </a>
