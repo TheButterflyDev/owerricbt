@@ -85,7 +85,13 @@ function WhatWeDoCarousel({ items }: { items: DoItem[] }) {
   const scrollToIndex = (i: number) => {
     const el = trackRef.current;
     const card = el?.children[i] as HTMLElement | undefined;
-    card?.scrollIntoView({ behavior: "smooth", inline: "start", block: "nearest" });
+    if (!el || !card) return;
+
+    // scroll only the track container horizontally — never the page
+    el.scrollTo({
+      left: card.offsetLeft - el.offsetLeft,
+      behavior: "smooth",
+    });
     setActive(i);
   };
 
