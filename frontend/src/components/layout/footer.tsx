@@ -112,7 +112,7 @@ export function Footer() {
                         </a>
                         <a href={MAIL_TO} target="_blank" rel="noreferrer" className="flex gap-x-2 items-center">
                             <MailIcon className="size-4" />
-                            <TypingAnimation>info@owerri-cbt-hitech.com</TypingAnimation>
+                            <TypingAnimation>owerricbt@gmail.com</TypingAnimation>
                         </a>
                         <a href={PHONE_LINK} target="_blank" rel="noreferrer" className="flex gap-x-2 items-center">
                             <Phone  className="size-4" /> 

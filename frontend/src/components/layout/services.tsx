@@ -2,6 +2,12 @@ import { TextAnimate } from "../ui/text-animate";
 import { FeatureTabs } from "../ui/scrolling-card";
 import { PixelImage } from "../ui/pixel-image";
 import { motion } from "motion/react";
+import { useRef, useState, useEffect } from "react";
+
+interface DoItem {
+  label: string;
+  image: string;
+}
 
 interface Service {
   id: string;
@@ -32,14 +38,14 @@ interface CommitmentItem {
 }
 
 const WHAT_WE_DO: DoItem[] = [
-  { label: "Computer-Based Testing" },
-  { label: "JAMB registration and support" },
-  { label: "Post-UTME and admission-related services" },
-  { label: "CBT examination preparation" },
-  { label: "Computer training" },
-  { label: "Digital learning" },
-  { label: "Online academic services" },
-  { label: "Practical technology training" },
+  { label: "Computer-Based Testing", image: "https://i.pinimg.com/736x/5d/bf/2d/5dbf2dffad4972d6f0ef561ccb10c289.jpg" },
+  { label: "JAMB registration and support", image: "https://i.pinimg.com/736x/01/92/35/01923505ba9f9c017540690639b7394b.jpg" },
+  { label: "Post-UTME and admission-related services", image: "https://i.pinimg.com/736x/5d/bf/2d/5dbf2dffad4972d6f0ef561ccb10c289.jpg" },
+  { label: "CBT examination preparation", image: "https://i.pinimg.com/1200x/6d/09/5a/6d095a155b0cc1583cf29fd3d48a0485.jpg" },
+  { label: "Computer training", image: "https://i.pinimg.com/1200x/6d/09/5a/6d095a155b0cc1583cf29fd3d48a0485.jpg" },
+  { label: "Digital learning", image: "https://i.pinimg.com/736x/c3/d1/7b/c3d17b0cd35c8757591d639c15410db5.jpg" },
+  { label: "Online academic services", image: "https://i.pinimg.com/736x/ff/6c/60/ff6c607d782e2a45be81f022e3913ec0.jpg" },
+  { label: "Practical technology training", image: "https://i.pinimg.com/736x/c3/d1/7b/c3d17b0cd35c8757591d639c15410db5.jpg" },
 ];
 
 const OUR_COMMITMENT: CommitmentItem[] = [
@@ -64,6 +70,111 @@ const OUR_COMMITMENT: CommitmentItem[] = [
     description: "Continuously improving the way we use technology to support education.",
   },
 ];
+
+function WhatWeDoCarousel({ items }: { items: DoItem[] }) {
+  const [active, setActive] = useState(0);
+  const trackRef = useRef<HTMLDivElement>(null);
+  const activeRef = useRef(0);
+  const pausedRef = useRef(false);
+  const resumeTimeout = useRef<number>(0);
+
+  useEffect(() => {
+    activeRef.current = active;
+  }, [active]);
+
+  const scrollToIndex = (i: number) => {
+    const el = trackRef.current;
+    const card = el?.children[i] as HTMLElement | undefined;
+    card?.scrollIntoView({ behavior: "smooth", inline: "start", block: "nearest" });
+    setActive(i);
+  };
+
+  const pauseThenResume = () => {
+    pausedRef.current = true;
+    window.clearTimeout(resumeTimeout.current);
+    resumeTimeout.current = window.setTimeout(() => {
+      pausedRef.current = false;
+    }, 4000);
+  };
+
+  const handleScroll = () => {
+    const el = trackRef.current;
+    if (!el) return;
+    const card = el.children[0] as HTMLElement | undefined;
+    if (!card) return;
+    const gap = 12;
+    const index = Math.round(el.scrollLeft / (card.offsetWidth + gap));
+    if (index !== activeRef.current) setActive(index);
+  };
+
+  useEffect(() => {
+    const id = window.setInterval(() => {
+      if (pausedRef.current) return;
+      scrollToIndex((activeRef.current + 1) % items.length);
+    }, 3000);
+    return () => window.clearInterval(id);
+  }, [items.length]);
+
+  return (
+    // fixed fallback height on mobile (no grid row to stretch against),
+    // stretches to match the left column's height at md+ via grid align-items:stretch
+    <div className="flex h-[420px] flex-col overflow-hidden md:h-full">
+      <div
+        ref={trackRef}
+        onScroll={handleScroll}
+        onPointerDown={pauseThenResume}
+        onWheel={pauseThenResume}
+        onMouseEnter={() => { pausedRef.current = true; }}
+        onMouseLeave={() => { pausedRef.current = false; }}
+        className="flex flex-1 gap-3 overflow-x-auto snap-x snap-mandatory scroll-smooth [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+      >
+        {items.map((item) => (
+          <div
+            key={item.label}
+            className="relative min-w-[80%] shrink-0 snap-start overflow-hidden rounded-card border border-navy/10 sm:min-w-[45%] md:min-w-[32%]"
+          >
+            <img
+              src={item.image}
+              alt={item.label}
+              loading="lazy"
+              className="absolute inset-0 h-full w-full object-cover"
+            />
+            {/* dark overlay so white text stays legible over any photo */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent" />
+            <div className="relative flex h-full items-end p-5">
+              <span className="font-sans text-body font-medium tracking-body text-paper">
+                {item.label}
+              </span>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div className="mt-4 flex items-center justify-center gap-2">
+        {items.map((_, i) => (
+          <button
+            key={i}
+            type="button"
+            aria-label={`Go to slide ${i + 1}`}
+            onClick={() => {
+              scrollToIndex(i);
+              pauseThenResume();
+            }}
+          >
+            <motion.span
+              animate={{
+                width: active === i ? 20 : 6,
+                opacity: active === i ? 1 : 0.3,
+              }}
+              transition={{ duration: 0.25, ease: "easeOut" }}
+              className="block h-1.5 rounded-full bg-navy"
+            />
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
 
 export function WhatWeDo() {
   return (
@@ -95,7 +206,7 @@ export function WhatWeDo() {
         </div>
 
         {/* Right: stacked ticket-style cards, one per service */}
-        <div className="flex flex-col gap-3">
+        {/* <div className="flex flex-col gap-3">
           {WHAT_WE_DO.map((item) => (
             <div
               className="flex items-center gap-4 rounded-card border-1 border-navy/10 px-5 py-4"
@@ -106,7 +217,8 @@ export function WhatWeDo() {
               </span>
             </div>
           ))}
-        </div>
+        </div> */}
+        <WhatWeDoCarousel items={WHAT_WE_DO} />
       </div>
     </section>
   );
@@ -135,13 +247,10 @@ export function OurCommitment() {
               transition={{ duration: 0.4, delay: i * 0.06, ease: "easeOut" }}
               className="rounded-card border border-paper/15 bg-navy-ink/40 p-6"
             >
-              <span className="flex size-9 items-center justify-center rounded-full bg-lemon/15 text-lemon">
-                
-              </span>
-              <p className="mt-4 font-sans text-body font-semibold text-paper">
+              <h5 className="mt-4 font-sans text-subheading font-semibold text-paper">
                 {item.title}
-              </p>
-              <p className="mt-1 font-sans text-caption tracking-caption text-paper/60">
+              </h5>
+              <p className="mt-1 font-sans text-body tracking-caption text-paper/60">
                 {item.description}
               </p>
             </motion.div>
