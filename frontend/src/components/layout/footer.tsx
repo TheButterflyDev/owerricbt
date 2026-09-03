@@ -122,14 +122,6 @@ export function Footer() {
                 </div>
 
                 <div>
-                    {/* <a
-                    href={WHATSAPP_LINK}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="inline-block rounded-button bg-lemon px-5 py-2.5 font-sans text-caption font-semibold tracking-caption text-navy transition hover:bg-lemon-dim"
-                    >
-                    Chat on WhatsApp
-                    </a> */}
                     <WhatsappDropdown />
                 </div>
                 </div>
