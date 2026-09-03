@@ -104,7 +104,9 @@ export default function About(){
                 <WhatWeDo />
                 <OurCommitment />
             </section>
-            <AboutSection AboutSection={ABOUT_SECTION_1} />
+            {ABOUT_SECTIONS.map((section, i) => (
+                <AboutSection key={section.caption} data={section} reverse={i % 2 === 1} />
+            ))}
         </>
        
     )
