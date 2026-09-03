@@ -5,6 +5,7 @@ import { TextAnimate } from "../components/ui/text-animate"
 import { motion } from "framer-motion"
 import { WhatWeDo, OurCommitment} from "../components/layout/services"
 import AboutSection from "../components/layout/about-sections"
+import { ABOUT_SECTIONS } from "../utils/about-sections"
 
 export default function About(){
     return (
