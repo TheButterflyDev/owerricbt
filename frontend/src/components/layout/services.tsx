@@ -211,19 +211,6 @@ export function WhatWeDo() {
           </a>
         </div>
 
-        {/* Right: stacked ticket-style cards, one per service */}
-        {/* <div className="flex flex-col gap-3">
-          {WHAT_WE_DO.map((item) => (
-            <div
-              className="flex items-center gap-4 rounded-card border-1 border-navy/10 px-5 py-4"
-            >
-              
-              <span className="font-sans text-body font-medium tracking-body text-navy">
-                {item.label}
-              </span>
-            </div>
-          ))}
-        </div> */}
         <WhatWeDoCarousel items={WHAT_WE_DO} />
       </div>
     </section>
@@ -232,18 +219,18 @@ export function WhatWeDo() {
 
 export function OurCommitment() {
   return (
-    <section className="border-y-2 border-navy bg-navy py-20">
+    <section className=" py-20">
       <div className="mx-auto max-w-6xl px-6">
-        <p className="font-mono text-caption uppercase tracking-caption text-lemon">
+        <p className="font-mono text-caption uppercase tracking-caption text-navy/60">
           Our commitment
         </p>
-        <h2 className="mt-2 max-w-lg font-display text-heading tracking-heading text-paper">
+        <h2 className="mt-2 max-w-lg font-display text-heading tracking-heading text-navy">
           <TextAnimate animation="slideUp" by="word">
             What You Can Count On
           </TextAnimate>
         </h2>
 
-        <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+        <div className="mt-12 grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-6 md:auto-rows-[180px]">
           {OUR_COMMITMENT.map((item, i) => (
             <motion.div
               key={item.title}
@@ -251,9 +238,19 @@ export function OurCommitment() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.4 }}
               transition={{ duration: 0.4, delay: i * 0.06, ease: "easeOut" }}
-              className="rounded-card border border-paper/15 bg-navy-ink/40 p-6"
+              className={`flex flex-col justify-end rounded-card border border-paper/15 bg-navy-ink/40 p-6 ${
+                i === 0
+                  ? "md:col-span-3 md:row-span-2"
+                  : i === 1
+                  ? "md:col-span-3"
+                  : "md:col-span-2"
+              }`}
             >
-              <h5 className="mt-4 font-sans text-subheading font-semibold text-paper">
+              <h5
+                className={`font-sans font-semibold text-paper ${
+                  i === 0 ? "text-heading" : "text-subheading"
+                }`}
+              >
                 {item.title}
               </h5>
               <p className="mt-1 font-sans text-body tracking-caption text-paper/60">
