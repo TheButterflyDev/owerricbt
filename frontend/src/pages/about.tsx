@@ -4,6 +4,7 @@ import { PixelImage } from "../components/ui/pixel-image"
 import { TextAnimate } from "../components/ui/text-animate"
 import { motion } from "framer-motion"
 import { WhatWeDo, OurCommitment} from "../components/layout/services"
+import AboutSection from "../components/layout/about-sections"
 
 export default function About(){
     return (
@@ -103,6 +104,7 @@ export default function About(){
                 <WhatWeDo />
                 <OurCommitment />
             </section>
+            <AboutSection AboutSection={ABOUT_SECTION_1} />
         </>
        
     )
